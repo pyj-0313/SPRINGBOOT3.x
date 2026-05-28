@@ -9,6 +9,6 @@
 	Hello world!
 </h1>
 
-<P>  The time on the server is 하이 </P>
+<P>  The time on the server is 하이!!!! </P>
 </body>
 </html>
