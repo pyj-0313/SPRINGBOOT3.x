@@ -1,12 +1,16 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Dtos.PersonDTO;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Controller
@@ -17,14 +21,16 @@ public class ParamController {
     //-----------------------------------
     // 사용자 - 파라미터 -> 서버 (잘받는지 확인)
     //-----------------------------------
-    @RequestMapping(value="/p01",method = RequestMethod.GET)
+//    @RequestMapping(value="/p01",method = RequestMethod.GET)
+    @GetMapping("/p01")
     public String paramHandler_1(@RequestParam(required = false) String name){
         log.info("GET /param/p01.."+name);
         return "param/page01";
         //WEB-INF/views/param/page01.jsp
     }
 
-    @RequestMapping(value="/p02",method = RequestMethod.POST)
+//    @RequestMapping(value="/p02",method = RequestMethod.POST)
+    @PostMapping("/p02")
     public String paramHandler_2(@RequestParam(name="username") String name){
         log.info("GET /param/p02.."+name);
         return "param/page02";
@@ -149,4 +155,32 @@ public class ParamController {
         modelAndView.setViewName("param/page13");
         return modelAndView;
     }
+
+    //-----------------------------------
+    //  Servlet Calss 사용해보기
+    //  HttpServletRequest request
+    //  HttpServletResponse response
+    //-----------------------------------
+    @RequestMapping(value="/p14",method = RequestMethod.GET)
+    public void paramHandler_14(HttpServletRequest request , HttpServletResponse response) throws ServletException, IOException {
+
+        log.info("GET /param/p14..");
+        // 1 파라미터 받기(o)
+        String name = request.getParameter("name");
+        int age = -1;
+        if(request.getParameter("age")!=null)
+            age = Integer.parseInt(request.getParameter("age"));
+        String addr = request.getParameter("addr");
+        // 2 유효성 검증(x)
+
+        // 3 서비스(x)
+
+        // 4 뷰로이동(+값 전달)
+        PersonDTO dto = new PersonDTO(name,age,addr);
+        request.setAttribute("dto",dto);
+        request.setAttribute("now", LocalDateTime.now());
+        request.getRequestDispatcher("/WEB-INF/views/param/page14.jsp").forward(request,response);
+    }
+
+
 }
