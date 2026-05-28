@@ -157,7 +157,7 @@ public class ParamController {
     }
 
     //-----------------------------------
-    //  Servlet Calss 사용해보기
+    //  Servlet Class 사용해보기
     //  HttpServletRequest request
     //  HttpServletResponse response
     //-----------------------------------
@@ -182,5 +182,25 @@ public class ParamController {
         request.getRequestDispatcher("/WEB-INF/views/param/page14.jsp").forward(request,response);
     }
 
-
+    //-----------------------------------
+    //  Forward / Redirect
+    //-----------------------------------
+    @GetMapping("/forward/init")
+    public String forward_init_handler(Model model) {
+        log.info("GET /param/forward/init...");
+        model.addAttribute("init", "init_value");
+        return "forward:/param/forward/step1";
+    }
+    @GetMapping("/forward/step1")
+    public String forward_step1_handler(Model model) {
+        log.info("GET /param/forward/step1...");
+        model.addAttribute("step1", "step1_value");
+        return "forward:/param/forward/step2";
+    }
+    @GetMapping("/forward/step2")
+    public String forward_step2_handler(Model model) {
+        log.info("GET /param/forward/step2...");
+        model.addAttribute("step2", "step2_value");
+        return "param/forward/step2";
+    }
 }
