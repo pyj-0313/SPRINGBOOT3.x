@@ -36,7 +36,7 @@ dependencies {
 	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl' //스프링부트 3.0 이상
 
 	// DEVTOOLS
-	implementation 'org.springframework.boot:spring-boot-devtools:4.0.6'
+	implementation 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
