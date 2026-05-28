@@ -13,6 +13,7 @@ public class HomeController {
     public String home(){
 //        System.out.println("GET /");
         log.info("GET /");
+        System.out.println();
         return "index";
     }
 }
