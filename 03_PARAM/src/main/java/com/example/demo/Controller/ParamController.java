@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -202,5 +203,30 @@ public class ParamController {
         log.info("GET /param/forward/step2...");
         model.addAttribute("step2", "step2_value");
         return "param/forward/step2";
+    }
+    //------------------------------------------------
+    @GetMapping("/redirect/init")
+    public String redirect_init_handler(Model model, RedirectAttributes redirectAttributes) {
+        log.info("GET /param/redirect/init...");
+
+//      model.addAttribute("init", "init_value");
+
+//      redirectAttributes.addAttribute("init","init_value");//QueryString 방식
+        redirectAttributes.addFlashAttribute("init","init_value"); //session 기반
+        return "redirect:/param/redirect/step1";
+    }
+    @GetMapping("/redirect/step1")
+    public String redirect_step1_handler(Model model, RedirectAttributes redirectAttributes) {
+        log.info("GET /param/redirect/step1...");
+//        model.addAttribute("step1", "step1_value");
+        redirectAttributes.addFlashAttribute("step1","step1_value"); //session 기반
+        return "redirect:/param/redirect/step2";
+    }
+    @GetMapping("/redirect/step2")
+    public String redirect_step2_handler(Model model) {
+        log.info("GET /param/redirect/step2...");
+//        model.addAttribute("step2", "step2_value");
+        model.addAttribute("step2","step2_value"); //session 기반
+        return "param/redirect/step2";
     }
 }
