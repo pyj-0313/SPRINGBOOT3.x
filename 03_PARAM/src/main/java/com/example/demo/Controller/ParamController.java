@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 
@@ -133,7 +134,7 @@ public class ParamController {
     }
 
     @RequestMapping(value="/p13",method = RequestMethod.GET)
-    public String paramHandler_13(PersonDTO dto, Model model){
+    public ModelAndView paramHandler_13(PersonDTO dto){
         log.info("GET /param/p13.."+dto);
         // 1 파라미터 받기(o)
 
@@ -142,8 +143,10 @@ public class ParamController {
         // 3 서비스(x)
 
         // 4 뷰로이동(+값 전달)
-        model.addAttribute("dto",dto);
-        model.addAttribute("now", LocalDateTime.now());
-        return "param/page13";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("dto",dto);
+        modelAndView.addObject("now", LocalDateTime.now());
+        modelAndView.setViewName("param/page13");
+        return modelAndView;
     }
 }
