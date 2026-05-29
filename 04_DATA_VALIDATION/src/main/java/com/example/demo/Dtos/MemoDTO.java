@@ -22,8 +22,8 @@ public class MemoDTO {
     @NotBlank(message = "TITLE 는 필수 항목입니다.")
     private String title;
     @NotBlank(message = "WRITER 는 필수 항목입니다.")
-    private String writer;
     @Email(message="example@example.com 형식으로 입력하세요")
+    private String writer;
     @NotBlank(message = "TEXT 는 필수 항목입니다.")
     private String text;
     @NotNull(message = "CREATE_AT 는 필수 항목입니다.")
