@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,6 +7,23 @@
 <body>
 
     <h1>HELLO WORLD THYMELEAF!</h1>
+    <!-- 기본  -->
+    <h2>TH : 속성값 가져오기 </h2>
+    이름 : <span th:text="${name}"> </span> <br/>
+    <!-- DTO   -->
+    DTO : <span th:text="${dto}"> </span> <br/>
+    DTO.NAME : <span th:text="${dto.name}"> </span> <br/>
+    DTO.AGE : <span th:text="${dto.age}"> </span> <br/>
+    DTO.ADDR : <span th:text="${dto.addr}"> </span> <br/>
+    <hr/>
+
+    <h2>TH : 반복문</h2>
+    <th:block th:each="dto:${list}">
+        <div th:text="${dto}"></div>
+    </th:block>
+    <hr/>
+    <h2>TH : 분기문</h2>
+
 
 </body>
 </html>
