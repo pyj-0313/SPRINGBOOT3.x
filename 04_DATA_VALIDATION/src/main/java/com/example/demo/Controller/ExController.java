@@ -1,21 +1,33 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Dtos.ExUserDto;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * ============================================================
- *  [EX] 파라미터 받기 실습 문제 (기본기)
+ *  [EX] 유효성 검증(Validation) 실습 문제
  * ============================================================
- *  - 각 문제의 주석(요청/조건/출력)을 읽고, 메서드 파라미터와 본문의 TODO를 채우세요.
- *  - 정답이 없는 스켈레톤입니다. 빈 부분을 직접 작성하면 됩니다.
- *  - 서버 포트: 8090 (application.properties)
+ *  - 각 문제의 주석(요청/조건/출력)을 읽고, TODO 부분을 직접 채우세요.
+ *  - 정답이 없는 스켈레톤입니다. 빈 부분을 채워 동작시키면 됩니다.
+ *  - 검증 대상 DTO 는 ExUserDto 입니다. (Domain.Common.Dto.ExUserDto)
+ *  - 서버 포트 : 8090 (application.properties)
+ *
+ *  [참고]
+ *  - 컨트롤러에서 @Valid + BindingResult 로 검증 결과를 받는다.
+ *  - BindingResult 는 반드시 검증 대상(@Valid 붙은 객체) "바로 뒤" 에 와야 한다.
+ *  - 제약 애너테이션은 DTO(ExUserDto) 에 작성한다.
  *
  *  [테스트 방법]
- *  - GET 요청: 브라우저 주소창에 URL 입력
- *  - POST 요청: 콘솔에서 curl 사용 (Windows PowerShell 예시는 각 문제에 적어둠)
+ *  - GET  : 브라우저 주소창에 URL 입력
+ *  - POST : PowerShell 에서 curl 사용 (각 문제에 예시 작성)
  *  - 결과는 콘솔(log) 출력으로 확인
  * ============================================================
  */
@@ -25,116 +37,160 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ExController {
 
     /*
-     * [EX01] @RequestParam - 단일 파라미터
-     * - 요청 : GET /ex/ex01?keyword=spring
-     * - 조건 : "keyword" 쿼리 파라미터를 String 으로 받는다.
-     * - 출력 : EX01 keyword : spring
+     * [EX01] @Valid + BindingResult 기본 형태
+     * - 요청 : GET /ex/ex01?username=hong&age=20&email=hong@test.com&password=abcd1234
+     * - 조건 : ExUserDto 를 검증 대상으로 받고, 검증 결과를 BindingResult 로 받는다.
+     *          오류가 있으면 hasErrors() 가 true 가 되어야 한다.
+     * - 출력 : EX01 오류 발생여부 : false   (값이 올바를 때)
+     *
+     *  [HINT]
+     *   - 파라미터에 @Valid ExUserDto dto, BindingResult bindingResult 를 선언
      */
     @GetMapping("/ex01")
-    public void ex01(/* TODO: keyword 파라미터 받기 */){
-        // TODO: log.info("EX01 keyword : " + keyword);
+    public void ex01(@Valid ExUserDto dto, BindingResult bindingResult){
+            /* TODO: @Valid 검증 대상 + BindingResult 받기 */
+        // TODO: log.info("EX01 오류 발생여부 : " + bindingResult.hasErrors());
+        log.info("EX01 오류 발생여부 : " + bindingResult.hasErrors());
     }
 
 
     /*
-     * [EX02] @RequestParam - required=false + defaultValue
-     * - 요청 : GET /ex/ex02            -> page 없음
-     *          GET /ex/ex02?page=3     -> page=3
-     * - 조건 : "page" 파라미터를 받되, 없으면 기본값 "1" 이 들어가게 한다.
-     * - 출력 : EX02 page : 1   /   EX02 page : 3
+     * [EX02] 검증 오류 메시지를 모두 콘솔에 출력하기
+     * - 요청 : GET /ex/ex02   (일부러 값을 비워서 오류 유발)
+     * - 조건 : 검증 오류가 있을 때, FieldError 를 순회하며
+     *          "필드명 / 메시지" 를 한 줄씩 log 로 출력한다.
+     * - 출력 : EX02 field : username, message : 이름은 필수입니다.   (예시)
+     *
+     *  [HINT]
+     *   - if(bindingResult.hasErrors()){ for(FieldError e : bindingResult.getFieldErrors()){ ... } }
      */
     @GetMapping("/ex02")
-    public void ex02(/* TODO: page 파라미터 받기 (없으면 기본값 1) */){
-        // TODO: log.info("EX02 page : " + page);
+    public void ex02(@Valid ExUserDto dto, BindingResult bindingResult
+            /* TODO: @Valid 대상 + BindingResult 받기 */){
+        if (bindingResult.hasErrors()) {
+            for (FieldError e : bindingResult.getFieldErrors()) {
+                log.info("EX02 field : " + e.getField() + ", message : " + e.getDefaultMessage());
+            }
+        }
+        // TODO: 오류가 있으면 FieldError 를 순회하며
+        //       log.info("EX02 field : " + e.getField() + ", message : " + e.getDefaultMessage());
     }
 
 
     /*
-     * [EX03] @RequestParam - 파라미터 이름과 변수 이름이 다를 때
-     * - 요청 : GET /ex/ex03?user_name=hong
-     * - 조건 : 전달되는 파라미터명은 "user_name" 이지만,
-     *          메서드 변수명은 name 으로 받는다.
-     * - 출력 : EX03 name : hong
+     * [EX03] 오류 메시지를 Model 에 담아 뷰로 전달하기
+     * - 요청 : GET /ex/ex03   (잘못된 값으로 호출)
+     * - 조건 : 각 FieldError 의 메시지를 Model 에 (필드명 -> 메시지) 형태로 담는다.
+     *          그래야 JSP 에서 ${username} 처럼 오류 메시지를 출력할 수 있다.
+     * - 출력 : 콘솔 + Model 속성 추가
+     *
+     *  [HINT]
+     *   - model.addAttribute(e.getField(), e.getDefaultMessage());
      */
     @GetMapping("/ex03")
-    public void ex03(/* TODO: user_name -> name 으로 매핑해서 받기 */){
-        // TODO: log.info("EX03 name : " + name);
+    public void ex03(@Valid ExUserDto dto, BindingResult bindingResult, Model model
+            /* TODO: @Valid 대상 + BindingResult + Model 받기 */
+    ){// TODO: 오류 순회하며 model 에 (필드명, 메시지) 담기
+        if (bindingResult.hasErrors()) {
+            for (FieldError e : bindingResult.getFieldErrors()) {
+                model.addAttribute(e.getField(), e.getDefaultMessage());
+            }
+        }
     }
 
 
     /*
-     * [EX04] @RequestParam - 여러 개 + 자동 형변환
-     * - 요청 : GET /ex/ex04?name=hong&age=20
-     * - 조건 : name 은 String, age 는 int 로 받는다. (문자열 -> int 자동변환 확인)
-     * - 출력 : EX04 name : hong, age : 20
+     * [EX04] POST 요청 + form 데이터 검증
+     * - 요청 : POST /ex/ex04  (body: username=&age=5&email=bad&password=1)
+     * - 조건 : POST 로 전달된 form 데이터를 ExUserDto 로 받아 검증한다.
+     * - 출력 : EX04 오류 개수 : 4   (예시 - 제약조건에 따라 달라짐)
+     *
+     *  [PowerShell 테스트]
+     *    curl -Method POST "http://localhost:8090/ex/ex04" -Body "username=&age=5&email=bad&password=1"
+     *
+     *  [HINT]
+     *   - 매핑 애너테이션을 @PostMapping("/ex04") 로 작성
+     *   - bindingResult.getErrorCount() 로 오류 개수 확인
      */
-    @GetMapping("/ex04")
-    public void ex04(/* TODO: name(String), age(int) 받기 */){
-        // TODO: log.info("EX04 name : " + name + ", age : " + age);
+    // TODO: POST 매핑 애너테이션 작성
+    @PostMapping("/ex04")
+    public void ex04(@Valid ExUserDto dto, BindingResult bindingResult, Model model
+            /* TODO: @Valid 대상 + BindingResult 받기 */
+    ){// TODO: log.info("EX04 오류 개수 : " + bindingResult.getErrorCount());
+        log.info("EX04 오루 개수 : " + bindingResult.getErrorCount());
     }
 
 
     /*
-     * [EX05] @RequestParam Map - 모든 파라미터를 한 번에
-     * - 요청 : GET /ex/ex05?a=1&b=2&c=3
-     * - 조건 : 어떤 파라미터가 올지 모를 때, 전부 Map<String,Object> 로 받는다.
-     * - 출력 : EX05 params : {a=1, b=2, c=3}
+     * [EX05] 특정 필드의 오류만 확인하기
+     * - 요청 : GET /ex/ex05?username=hong&age=20&email=bad-email&password=abcd1234
+     * - 조건 : email 형식이 틀렸을 때, "email" 필드에 오류가 있는지 검사한다.
+     * - 출력 : EX05 email 오류 여부 : true
+     *
+     *  [HINT]
+     *   - bindingResult.hasFieldErrors("email")
+     *   - bindingResult.getFieldError("email").getDefaultMessage()
      */
     @GetMapping("/ex05")
-    public void ex05(/* TODO: 모든 파라미터를 Map 으로 받기 */){
-        // TODO: log.info("EX05 params : " + params);
+    public void ex05(@Valid ExUserDto dto, BindingResult bindingResult
+            /* TODO: @Valid 대상 + BindingResult 받기 */
+    ){// TODO: log.info("EX05 email 오류 여부 : " + bindingResult.hasFieldErrors("email"));
+        log.info("EX05 email 오류 여부 : " + bindingResult.hasFieldErrors("email"));
     }
 
 
     /*
-     * [EX06] @PathVariable - 경로 변수 1개
-     * - 요청 : GET /ex/ex06/100
-     * - 조건 : URL 경로의 {id} 부분을 int 로 받는다.
-     * - 출력 : EX06 id : 100
-     */
-    @GetMapping("/ex06/{id}")
-    public void ex06(/* TODO: 경로변수 id 받기 */){
-        // TODO: log.info("EX06 id : " + id);
-    }
-
-
-    /*
-     * [EX07] @PathVariable - 경로 변수 여러 개
-     * - 요청 : GET /ex/ex07/book/100
-     * - 조건 : {category}, {id} 두 경로변수를 받는다.
-     * - 출력 : EX07 category : book, id : 100
-     */
-    @GetMapping("/ex07/{category}/{id}")
-    public void ex07(/* TODO: category, id 경로변수 받기 */){
-        // TODO: log.info("EX07 category : " + category + ", id : " + id);
-    }
-
-
-    /*
-     * [EX08] DTO(커맨드 객체) 바인딩
-     * - 요청 : GET /ex/ex08?name=hong&age=20&addr=seoul
-     * - 조건 : PersonDto(name, age, addr) 로 한 번에 받는다.
-     *          (필드명과 파라미터명이 같으면 자동 바인딩됨)
-     * - 출력 : EX08 dto : PersonDto(name=hong, age=20, addr=seoul)
-     */
-    @GetMapping("/ex08")
-    public void ex08(/* TODO: PersonDto 로 받기 */){
-        // TODO: log.info("EX08 dto : " + dto);
-    }
-
-
-    /*
-     * [EX09] POST + @RequestParam (form 데이터)
-     * - 요청 : POST /ex/ex09  (body: username=hong)
-     * - 조건 : POST 로 전달된 form 파라미터 "username" 을 받는다.
-     * - 출력 : EX09 username : hong
+     * ============================================================
+     * [EX06] JSP 폼 연동 + 검증 메시지 화면 출력  (★ 화면 연동 문제)
+     * ============================================================
+     * - 연동 화면 : /WEB-INF/views/ex/form.jsp  (이미 작성되어 있음)
      *
-     * [PowerShell 테스트]
-     *   curl -Method POST "http://localhost:8090/ex/ex09" -Body "username=hong"
+     * - 요청1 : GET  /ex/form   -> 입력 폼 화면을 보여준다.
+     * - 요청2 : POST /ex/form   -> 입력값을 검증하고, 오류 메시지를 화면에 출력한다.
+     *
+     * - 동작 조건
+     *   1) 검증 대상(ExUserDto)을 @Valid 로 받고, 결과를 BindingResult 로 받는다.
+     *   2) 입력값이 화면에 다시 채워지도록 dto 를 Model 에 담는다.  (model.addAttribute("dto", dto))
+     *   3) 오류가 있으면 FieldError 를 순회하며
+     *      Model 에 (필드명 -> 메시지) 로 담는다.  -> JSP의 ${username},${age},${email},${password} 위치에 출력됨
+     *   4) 오류가 있으면 다시 폼 화면("ex/form")으로, 없으면 완료 페이지("ex/form_ok")로 이동한다.
+     *
+     * - 화면 테스트 : 브라우저에서 http://localhost:8090/ex/form 접속 후
+     *                값을 비우거나 잘못 입력하고 [가입] 버튼 클릭 -> 각 항목 옆에 메시지 표시 확인
      */
-    // TODO: POST 요청을 처리하도록 매핑 애너테이션을 작성하세요. (예: @PostMapping("/ex09"))
-    public void ex09(/* TODO: username 파라미터 받기 */){
-        // TODO: log.info("EX09 username : " + username);
+    @GetMapping("/form")
+    public void form_get(){
+        log.info("GET /ex/form... 입력 폼 표시");
+        // return 없음 -> /WEB-INF/views/ex/form.jsp 로 이동(자동)
+    }
+
+    @PostMapping("/form")
+    public String form_post(@Valid ExUserDto dto, BindingResult bindingResult, Model model
+            /* TODO 1: @Valid 검증 대상 + BindingResult + Model 받기 */
+    ){
+        // log.info("POST /ex/form..." + dto);
+        // TODO 2: 입력값 유지를 위해 dto 를 model 에 담기
+        //         model.addAttribute("dto", dto);
+        model.addAttribute("dto",dto);
+        // TODO 3: 오류가 있으면 FieldError 순회하며 (필드명 -> 메시지) 를 model 에 담기
+        //         if(bindingResult.hasErrors()){
+        //             for(FieldError e : bindingResult.getFieldErrors()){
+        //                 model.addAttribute(e.getField(), e.getDefaultMessage());
+        //             }
+        //             return "ex/form";   // 오류 시 폼으로 복귀
+        //         }
+        if(bindingResult.hasErrors()){
+            for(FieldError e : bindingResult.getFieldErrors()){
+                model.addAttribute(e.getField(), e.getDefaultMessage());
+            }
+            return "ex/form";
+        }
+
+
+        // TODO 4: 검증 통과 시 완료 화면으로 이동
+        // 콘솔내용 추가
+        log.info("POST /ex/form 검증 통과! : " + dto);
+        return "ex/form_ok";
     }
 
 }

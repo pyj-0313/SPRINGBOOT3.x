@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -228,5 +229,20 @@ public class ParamController {
 //        model.addAttribute("step2", "step2_value");
         model.addAttribute("step2","step2_value"); //session 기반
         return "param/redirect/step2";
+    }
+
+    //---------------------------------
+    // 파라미터 : Map<String,Object>
+    //---------------------------------
+    @GetMapping("/mso")
+    public void mapStringObjectParamTest(@RequestParam Map<String,Object> param){
+        log.info("GET /param/mso..." + param);
+        //http://localhost:8090/param/mso?m=1&n=2&k=3&d=4
+    }
+    @PostMapping("/mso")
+    public void mapStringObjectParamTest_POST(@RequestBody Map<String,Object> param){
+        log.info("POST /param/mso..." + param);
+        //http://localhost:8090/param/mso
+        //{"m":"1","n":"2","k":"3","d":"4"}
     }
 }
