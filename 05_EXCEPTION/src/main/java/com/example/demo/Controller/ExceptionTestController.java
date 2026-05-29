@@ -3,7 +3,6 @@ package com.example.demo.Controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,24 +15,25 @@ import java.io.FileNotFoundException;
 public class ExceptionTestController {
 //    http://localhost:8090/except/ex1
 
-    @ExceptionHandler(FileNotFoundException.class)
-    public String exceptionHandler_1(Exception e, Model model){
-        log.error("ex1 : " + e);
-        model.addAttribute("e",e);
-        return "except/error1";
-    }
+//    @ExceptionHandler(FileNotFoundException.class)
+//    public String exceptionHandler_1(Exception e, Model model){
+//        log.error("ExceptionTestController ex1 : " + e);
+//        model.addAttribute("e",e);
+//        return "except/error1";
+//    }
+//    @ExceptionHandler(ArithmeticException.class)
+//    public String exceptionHandler_2(Exception e, Model model){
+//        log.error("ExceptionTestController ex2 : " + e);
+//        model.addAttribute("e",e);
+//        return "except/error2";
+//    }
+
     @GetMapping("/ex1")
     public void ex1() throws FileNotFoundException {
         log.info("GET /except/ex1...");
         throw new FileNotFoundException("파일을 찾을 수 없습니다..");
     }
 
-    @ExceptionHandler(ArithmeticException.class)
-    public String exceptionHandler_2(Exception e, Model model){
-        log.error("ex2 : " + e);
-        model.addAttribute("e",e);
-        return "except/error2";
-    }
     @GetMapping("/ex2/{num}/{div}")
     public String ex2(
                 @PathVariable int num,
