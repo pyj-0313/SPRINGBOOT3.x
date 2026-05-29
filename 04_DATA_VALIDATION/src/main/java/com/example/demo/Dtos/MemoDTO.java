@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -30,5 +31,8 @@ public class MemoDTO {
     @DateTimeFormat(pattern="yyyy-MM-dd-'T'HH:mm")
     @Future(message="오늘날짜기준 이후날짜를 입력하세요")
     private LocalDateTime createAt;
+
+    //CUSTOM DATABINDER
+    private LocalDate customData;   //yyyy-MM-dd
 
 }
