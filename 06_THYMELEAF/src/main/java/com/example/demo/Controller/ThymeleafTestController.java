@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,12 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/th")
 public class ThymeleafTestController {
-    @GetMapping("/index/{isAuth}")
-    public void index(@PathVariable Boolean isAuth, Model model){
+    @GetMapping("/index/")
+    public void index(@RequestParam Boolean isAuth, Model model){
         log.info("GET /th/index..");
-
+        //http://localhost:8090/th/index?isAuth=true
         //기본
-        model.addAttribute("name","홍길동");
+        model.addAttribute("name","HongGilDong");
         //DTO
         model.addAttribute("dto",new PersonDTO("남길동",55,"대구"));
         //LIST<DTO>
@@ -34,6 +34,7 @@ public class ThymeleafTestController {
         log.info("is auth ? " + isAuth);
         model.addAttribute("isAuth",isAuth);
 
+        //
 
     }
 }
