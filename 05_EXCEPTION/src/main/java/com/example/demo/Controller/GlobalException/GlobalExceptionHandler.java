@@ -30,4 +30,11 @@ public class GlobalExceptionHandler {
         return "global/error3";
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public String exceptionHandler(Exception e, Model model){
+        log.error("IllegalStateException ex05 : " + e);
+        model.addAttribute("e",e);
+        return "global/error";
+    }
+
 }
