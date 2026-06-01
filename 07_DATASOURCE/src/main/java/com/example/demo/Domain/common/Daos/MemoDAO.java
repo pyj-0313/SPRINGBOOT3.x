@@ -5,11 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class MemoDAO {
@@ -25,5 +24,23 @@ public class MemoDAO {
         pstmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
         int result = pstmt.executeUpdate();
         return result;
+    }
+    public List<MemoDTO> selectAll() throws SQLException{
+        Connection conn = dataSource3.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement("select * from tbl_memo order by id desc");
+        ResultSet rs = pstmt.executeQuery();
+        List<MemoDTO> list = new ArrayList<>();
+        MemoDTO dto = null;
+        while(rs.next()){
+            dto = MemoDTO.builder()
+                    .id(rs.getLong("id"))
+                    .title(rs.getString("title"))
+                    .writer(rs.getString("writer"))
+                    .text(rs.getString("text"))
+                    .createAt(rs.getTimestamp("createAt").toLocalDateTime())
+                    .build();
+            list.add(dto);
+        }
+        return list;
     }
 }
