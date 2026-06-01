@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.beans.PropertyEditorSupport;
 import java.sql.SQLException;
@@ -39,7 +40,7 @@ public class MemoController {
     }
 
     @PostMapping("/add")
-    public String memoAddPost(@Valid MemoDTO memoDTO, BindingResult bindingResult, Model model) throws SQLException {
+    public String memoAddPost(@Valid MemoDTO memoDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws SQLException {
         //1. 파라미터 받기
         log.info("POST /memo/add..." + memoDTO);
 //        log.info("BindingResult : " + result);
@@ -58,14 +59,17 @@ public class MemoController {
         int result = memoDAO.insert(memoDTO);
 
         //4. 뷰로 이동(+값)
-        return "memo/list";
+        redirectAttributes.addFlashAttribute("message","메모추가 성공");
+        return "redirect:/memo/list";
     }
 
     @GetMapping("/list")
-    public void list_get(){
+    public void list_get(Model model) throws SQLException {
         log.info("GET /memo/list...");
 
+        model.addAttribute("list",memoDAO.selectAll());
     }
+
 }
 
 
