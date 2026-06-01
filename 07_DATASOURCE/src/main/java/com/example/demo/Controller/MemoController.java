@@ -59,16 +59,54 @@ public class MemoController {
         int result = memoDAO.insert(memoDTO);
 
         //4. 뷰로 이동(+값)
-        redirectAttributes.addFlashAttribute("message","메모추가 성공");
+        if(result>0)
+            redirectAttributes.addFlashAttribute("message","메모추가 성공");
         return "redirect:/memo/list";
     }
 
     @GetMapping("/list")
     public void list_get(Model model) throws SQLException {
         log.info("GET /memo/list...");
-
         model.addAttribute("list",memoDAO.selectAll());
     }
+
+    @GetMapping("/update")
+    public void memo_update(Long id,Model model) throws SQLException {
+        log.info("GET /memo/update...." + id);
+        MemoDTO memoDTO = memoDAO.selectOne(id);
+        if(memoDTO!=null)
+            model.addAttribute("dto",memoDTO);
+        else
+            ;
+
+    }
+    @PostMapping("/update")
+    public String memo_update_post(MemoDTO dto,Model model, RedirectAttributes redirectAttributes) throws SQLException {
+        log.info("GET /memo/update...." + dto);
+        //1 파라미터
+        //2 유효성
+        //3 서비스(수정)
+        int result = memoDAO.update(dto);
+        //4 뷰로이동(+값, +메시지)
+        if(result>0) {
+            redirectAttributes.addFlashAttribute("message",dto.getId() + "업데이트 성공!");
+        }else
+            redirectAttributes.addFlashAttribute("message",dto.getId() + "업데이트 실패!");
+        return "redirect:/memo/list";
+    }
+
+    @GetMapping("/delete")
+    public String memo_delete(Long id,RedirectAttributes redirectAttributes) throws SQLException {
+        log.info("GET /memo/delete...." + id);
+
+        int result = memoDAO.delete(id);
+        if(result>0)
+            redirectAttributes.addFlashAttribute("message",id + "삭제 성공!");
+        else
+            redirectAttributes.addFlashAttribute("message",id + "삭제 실패!");
+        return "redirect:/memo/list";
+    }
+
 
 }
 
