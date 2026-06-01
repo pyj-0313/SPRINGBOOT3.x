@@ -27,13 +27,17 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
 	annotationProcessor 'org.projectlombok:lombok'
-	// SPRING BOOT TEST
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// MYSQL CONNECTOR JAVA
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
-	//
+	// JDBC API
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+	// BASICDATASOURCE
+	implementation 'org.apache.commons:commons-dbcp2:2.14.0'
 
 	// DEVTOOLS
 	implementation 'org.springframework.boot:spring-boot-devtools'
@@ -41,7 +45,8 @@ dependencies {
 	// VALIDATION
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	testAnnotationProcessor 'org.projectlombok:lombok'
+	// SPRINGBOOT TEST
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	// JUNIT
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
