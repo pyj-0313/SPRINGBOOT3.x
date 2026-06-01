@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/th")
 public class ThymeleafTestController {
-    @GetMapping("/index/")
+    @GetMapping("/index")
     public void index(@RequestParam Boolean isAuth, Model model){
         log.info("GET /th/index..");
         //http://localhost:8090/th/index?isAuth=true
@@ -35,6 +35,10 @@ public class ThymeleafTestController {
         model.addAttribute("isAuth",isAuth);
 
         //
-
     }
+    @GetMapping("/fragments")
+    public void fragment_test(Model model){
+        log.info("GET /th/fragments");
+    }
+
 }
