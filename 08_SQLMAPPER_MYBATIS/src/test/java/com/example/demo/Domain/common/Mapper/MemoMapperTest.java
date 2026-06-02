@@ -106,7 +106,7 @@ class MemoMapperTest {
         Map<String,Object> param = new HashMap();
         param.put("field","1");
         param.put("type","writer");
-        param.put("keyword","작성자");
+        param.put("keyword","a");
         List< Map<String,Object> > list =  memoMapper.selectAllChooseXML(param);
         System.out.println("TOTAL : " + list.size());
         list.forEach(System.out::println);
@@ -116,7 +116,7 @@ class MemoMapperTest {
         Map<String,Object> param = new HashMap();
         param.put("field","3");
         param.put("type", Arrays.asList("text","writer"));
-        param.put("keyword","5");
+        param.put("keyword","a");
         List< Map<String,Object> > list =  memoMapper.selectAllIfAndXML(param);
         System.out.println("TOTAL : " + list.size());
         list.forEach(System.out::println);

@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Domain.Common.Daos.MemoDAO;
 import com.example.demo.Domain.Common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Mapper.MemoMapper;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Controller
 @Slf4j
@@ -22,6 +25,9 @@ public class MemoController {
 
     @Autowired
     private MemoDAO memoDAO;
+    @Autowired
+    private MemoMapper memoMapper;
+
 
     @ExceptionHandler
     public String SQLExceptionHandler(Exception e, Model model){
@@ -52,10 +58,14 @@ public class MemoController {
 //            log.info("ERROR FIELD : " + result.getFieldError("id").getDefaultMessage());
 
         //3. 서비스 실행
-        int result = memoDAO.insert(memoDTO);
+        long result = memoDAO.insert(memoDTO);
+
+//        memoDTO.setCreateAt(LocalDateTime.now());
+//        int result = memoMapper.insert(memoDTO);
+
 
         //4. 뷰로 이동(+값)
-        if(result>0)
+//        if(result>0)
             redirectAttributes.addFlashAttribute("message","메모추가 성공");
         return "redirect:/memo/list";
     }
