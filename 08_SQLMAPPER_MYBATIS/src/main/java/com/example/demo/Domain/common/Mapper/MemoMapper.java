@@ -40,4 +40,11 @@ public interface MemoMapper {
     public MemoDTO selectOneXML(long id);
     public List<MemoDTO> selectAllXML();
     public List<Map<String,Object>> selectAllMapXML();
+    //
+    public List< Map<String,Object> > selectAllIfXML(Map<String,Object> param);
+    public List< Map<String,Object> > selectAllChooseXML(Map<String,Object> param);
+    public List< Map<String,Object> > selectAllIfAndXML(Map<String,Object> param);
+    public List< Map<String,Object> > selectForEachAnd(Map<String,Object> param);
+
+
 }

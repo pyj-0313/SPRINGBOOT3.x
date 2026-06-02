@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +88,46 @@ class MemoMapperTest {
     @Test
     public void t13(){
         List<Map<String,Object>> list = memoMapper.selectAllMapXML();
+        list.forEach(System.out::println);
+    }
+
+    //
+    @Test
+    public void t14(){
+        Map<String,Object> param = new HashMap();
+        param.put("type","text");
+        param.put("keyword","5");
+        List< Map<String,Object> > list =  memoMapper.selectAllIfXML(param);
+        System.out.println("TOTAL : " + list.size());
+        list.forEach(System.out::println);
+    }
+    @Test
+    public void t15(){
+        Map<String,Object> param = new HashMap();
+        param.put("field","1");
+        param.put("type","writer");
+        param.put("keyword","작성자");
+        List< Map<String,Object> > list =  memoMapper.selectAllChooseXML(param);
+        System.out.println("TOTAL : " + list.size());
+        list.forEach(System.out::println);
+    }
+    @Test
+    public void t16(){
+        Map<String,Object> param = new HashMap();
+        param.put("field","3");
+        param.put("type", Arrays.asList("text","writer"));
+        param.put("keyword","5");
+        List< Map<String,Object> > list =  memoMapper.selectAllIfAndXML(param);
+        System.out.println("TOTAL : " + list.size());
+        list.forEach(System.out::println);
+    }
+    @Test
+    public void t17(){
+        Map<String,Object> param = new HashMap();
+        param.put("fields", Arrays.asList("id","text","writer"));
+        param.put("keyword","5");
+        List< Map<String,Object> > list =  memoMapper.selectForEachAnd(param);
+        System.out.println("TOTAL : " + list.size());
         list.forEach(System.out::println);
     }
 }
