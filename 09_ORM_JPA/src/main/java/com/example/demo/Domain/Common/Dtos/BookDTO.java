@@ -18,4 +18,4 @@ public class BookDTO {
     private String title;   // 제목
     private String author;  // 저자
     private Integer price;  // 가격
-}
+}            
