@@ -1,13 +1,11 @@
-package com.example.demo.Domain.common.Daos;
+package com.example.demo.Domain.Common.Daos;
 
-import com.example.demo.Domain.common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Dtos.MemoDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class MemoDAOTest {

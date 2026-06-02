@@ -1,6 +1,6 @@
-package com.example.demo.Domain.common.Daos;
+package com.example.demo.Domain.Common.Daos;
 
-import com.example.demo.Domain.common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Dtos.MemoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

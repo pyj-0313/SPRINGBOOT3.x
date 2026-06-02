@@ -1,6 +1,6 @@
-package com.example.demo.Domain.common.Mapper;
+package com.example.demo.Domain.Common.Mapper;
 
-import com.example.demo.Domain.common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Dtos.MemoDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,9 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -50,6 +47,45 @@ class MemoMapperTest {
     @Test
     public void t6(){
         List<Map<String, Object>> list = memoMapper.selectAllWithResultMap();
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void t7(){
+        List<MemoDTO> list = memoMapper.selectAllContains("text","a");
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void t8(){
+        memoMapper.insertXML(new MemoDTO(null,"TITLE88","a@a.com","text55", LocalDateTime.now()));
+    }
+
+    @Test
+    public void t9(){
+        memoMapper.updateXML(new MemoDTO(55L,null,null,"text55!!!!!!!!!", null));
+    }
+
+    @Test
+    public void t10(){
+        memoMapper.deleteXML(55L);
+    }
+
+    @Test
+    public void t11(){
+        MemoDTO memoDTO = memoMapper.selectOneXML(13L);
+        System.out.println(memoDTO);
+    }
+
+    @Test
+    public void t12(){
+        List<MemoDTO> list = memoMapper.selectAllXML();
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void t13(){
+        List<Map<String,Object>> list = memoMapper.selectAllMapXML();
         list.forEach(System.out::println);
     }
 }

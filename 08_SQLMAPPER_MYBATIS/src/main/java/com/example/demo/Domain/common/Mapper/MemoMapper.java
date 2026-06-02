@@ -1,7 +1,7 @@
-package com.example.demo.Domain.common.Mapper;
+package com.example.demo.Domain.Common.Mapper;
 
 
-import com.example.demo.Domain.common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Dtos.MemoDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface MemoMapper {
     public List<MemoDTO> selectALL();
 
     @Select("select * from tbl_memo where ${type} like concat('%',#{keyword},'%')")
-    public List<MemoDTO> selectAllContains(String type,String keyword);
+    public List<MemoDTO> selectAllContains(@Param(value = "type") String type,String keyword);
 
     @Results(id="MemoResultMap",value={
             @Result(property = "text",column = "text"),
@@ -33,6 +33,11 @@ public interface MemoMapper {
     @Select("select text,writer from tbl_memo")
     public List<Map<String,Object>> selectAllWithResultMap();
 
-
-
+    //xml
+    public int insertXML(MemoDTO memoDTO);
+    public int updateXML(MemoDTO memoDTO);
+    public int deleteXML(long memoDTO);
+    public MemoDTO selectOneXML(long id);
+    public List<MemoDTO> selectAllXML();
+    public List<Map<String,Object>> selectAllMapXML();
 }
