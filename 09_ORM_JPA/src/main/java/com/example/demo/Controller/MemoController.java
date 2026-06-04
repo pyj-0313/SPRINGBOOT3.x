@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Domain.Common.Daos.MemoDAO;
 import com.example.demo.Domain.Common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Dtos.PageBlock;
 import com.example.demo.Domain.Common.Dtos.PageDTO;
 import com.example.demo.Domain.Common.Entity.Memo;
 import com.example.demo.Domain.Common.Repository.MemoRepository;
@@ -17,10 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
@@ -68,16 +66,24 @@ public class MemoController {
 //            log.info("ERROR FIELD : " + result.getFieldError("id").getDefaultMessage());
 
         //3. 서비스 실행
-        int result = memoDAO.insert(memoDTO);
+//        int result = memoDAO.insert(memoDTO);
+        Memo memo = Memo.builder()
+                .id(memoDTO.getId())
+                .text(memoDTO.getText())
+                .title(memoDTO.getTitle())
+                .writer(memoDTO.getWriter())
+                .createAt(LocalDateTime.now())
+                .build();
+        memoRepository.save(memo);
 
         //4. 뷰로 이동(+값)
-        if(result>0)
-            redirectAttributes.addFlashAttribute("message","메모추가 성공");
+        redirectAttributes.addFlashAttribute("message","메모추가 성공");
         return "redirect:/memo/list";
     }
 
     @GetMapping("/list")
-    public void list_get(PageDTO pageDTO, Model model) throws SQLException {
+    public void list_get(
+            PageDTO pageDTO, Model model) throws SQLException {
         log.info("GET /memo/list..."+pageDTO);
         //파라미터
 
@@ -86,12 +92,23 @@ public class MemoController {
         //서비스(+페이징처리)
         int pageNo = 0;     //현재 pageNo
         int amount = 10;    //한페이지 표시할 게시물 건수
+        if(pageDTO.getPageNo()!=null)
+            pageNo = pageDTO.getPageNo();
+        else
+            pageDTO.setPageNo(0);
+
+        if(pageDTO.getAmount()!=null)
+            amount = pageDTO.getAmount();
+        else
+            pageDTO.setAmount(10);
 
         Pageable pageable = PageRequest.of(pageNo,amount, Sort.by("id").descending());
         Page<Memo> page =  memoRepository.findAll(pageable);
+        PageBlock pageBlock = new PageBlock(pageDTO,page);
 
         model.addAttribute("page",page);
         model.addAttribute("list",page.getContent());
+        model.addAttribute("pageBlock",pageBlock);
 
 //        model.addAttribute("list",memoDAO.selectAll());
 //        model.addAttribute("list",memoRepository.findAll());

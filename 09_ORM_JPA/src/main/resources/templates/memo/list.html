@@ -35,19 +35,22 @@
             </tr>
         </th:block>
         </tbody>
-        <tfoot>
+        <tfoot >
             <!-- 이전     -->
-            <div th:if="${page.hasPrevious()}">
-                <a th:href="@{/memo/list(pageNo=${page.getNumber()-1})}">이전</a>
-            </div>
+            <th:block th:if="${pageBlock.prev}">
+<!--                <a th:href="@{/memo/list(pageNo=${pageBlock.startPage - pageBlock.pagePerBlock})}">이전</a>-->
+                <a th:href="@{/memo/list(pageNo=${pageBlock.nowBlock - 1} * ${pageBlock.pagePerBlock} - ${pageBlock.pagePerBlock})}">이전</a>
+            </th:block>
 
             <!-- 페이징블럭     -->
-            <div></div>
+            <th:block th:each="i : ${#numbers.sequence(pageBlock.startPage, pageBlock.endPage)}">
+                <a th:href="@{/memo/list(pageNo=${i})}" th:text="${i+1}"></a>&nbsp;&nbsp;
+            </th:block>
 
             <!-- 이후     -->
-            <div th:if="${page.hasNext()}">
-                <a th:href="@{/memo/list(pageNo=${page.getNumber()+1})}">다음</a>
-            </div>
+            <th:block th:if="${pageBlock.next}">
+                <a th:href="@{/memo/list(pageNo=${pageBlock.startPage + pageBlock.pagePerBlock})}">다음</a>
+            </th:block>
         </tfoot>
     </table>
     <hr/>
