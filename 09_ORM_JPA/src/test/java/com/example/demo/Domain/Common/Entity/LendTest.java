@@ -40,6 +40,20 @@ class LendTest {
         //도서이름으로 대여 내역 조회
         List<Lend> list = lendRepository.findAllendsByBook("JAVA의정석");
         list.forEach(System.out::println);
+    }
 
+    @Test
+    public void t3(){
+        System.out.println("1 start-------------");
+        Lend lend = lendRepository.findById(1L).get();
+        System.out.println("1 end-------------");
+
+        System.out.println("2 start-------------");
+        System.out.println(lend.getUser());
+        System.out.println("2 end-------------");
+
+        System.out.println("3 start-------------");
+        System.out.println(lend.getBook());
+        System.out.println("3 end-------------");
     }
 }
