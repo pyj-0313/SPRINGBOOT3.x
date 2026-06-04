@@ -3,6 +3,7 @@ package com.example.demo.Domain.Common.Entity;
 import com.example.demo.Domain.Common.Repository.BookRepository;
 import com.example.demo.Domain.Common.Repository.LendRepository;
 import com.example.demo.Domain.Common.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,17 +44,19 @@ class LendTest {
     }
 
     @Test
+    @Transactional
     public void t3(){
+
         System.out.println("1 start-------------");
         Lend lend = lendRepository.findById(1L).get();
         System.out.println("1 end-------------");
 
         System.out.println("2 start-------------");
-        System.out.println(lend.getUser());
+        System.out.println(lend.getUser().getUsername());
         System.out.println("2 end-------------");
 
         System.out.println("3 start-------------");
-        System.out.println(lend.getBook());
+        System.out.println(lend.getBook().getBookName());
         System.out.println("3 end-------------");
     }
 }
