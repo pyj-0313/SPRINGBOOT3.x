@@ -10,16 +10,21 @@
     <a href="/memo/add">메모추가</a>
     <hr/>
     <table>
+        <thead>
         <tr>
             <th>ID</th>
+            <th>TITLE</th>
             <th>TEXT</th>
             <th>WIRTER</th>
             <th>CREATEAT</th>
             <th>관리</th>
         </tr>
+        </thead>
+        <tbody>
         <th:block th:each="dto:${list}">
             <tr>
                 <td th:text="${dto.id}"></td>
+                <td th:text="${dto.title}"></td>
                 <td th:text="${dto.text}"></td>
                 <td th:text="${dto.writer}"></td>
                 <td th:text="${dto.createAt}"></td>
@@ -29,6 +34,21 @@
                 </td>
             </tr>
         </th:block>
+        </tbody>
+        <tfoot>
+            <!-- 이전     -->
+            <div th:if="${page.hasPrevious()}">
+                <a th:href="@{/memo/list(pageNo=${page.getNumber()-1})}">이전</a>
+            </div>
+
+            <!-- 페이징블럭     -->
+            <div></div>
+
+            <!-- 이후     -->
+            <div th:if="${page.hasNext()}">
+                <a th:href="@{/memo/list(pageNo=${page.getNumber()+1})}">다음</a>
+            </div>
+        </tfoot>
     </table>
     <hr/>
     <div th:text="${message}"></div>

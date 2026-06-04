@@ -21,7 +21,7 @@ class MemoRepositoryTest {
 
     @Test
     public void t1(){
-        Memo memo = new Memo(null,"text3","c@c.com", LocalDateTime.now());
+        Memo memo = new Memo(null,"","text3","c@c.com", LocalDateTime.now());
         System.out.println(memo);
         memoRepository.save(memo);
         System.out.println(memo);
@@ -29,7 +29,7 @@ class MemoRepositoryTest {
 
     @Test
     public void t2(){
-        Memo memo = new Memo(4L,"text!!!","a!!!@a.com", LocalDateTime.now());
+        Memo memo = new Memo(4L,"","text!!!","a!!!@a.com", LocalDateTime.now());
         System.out.println(memo);
         memoRepository.save(memo);
         System.out.println(memo);
@@ -57,7 +57,7 @@ class MemoRepositoryTest {
     public void post1000(){
         if(memoRepository.count()==0){
             for(int i=0;i<1000;i++){
-                memoRepository.save(new Memo(null,"TEXT-"+i,"WRITER-"+i,LocalDateTime.now()));
+                memoRepository.save(new Memo(null,"TITLE-"+i,"TEXT-"+i,"WRITER-"+i,LocalDateTime.now()));
             }
         }
     }

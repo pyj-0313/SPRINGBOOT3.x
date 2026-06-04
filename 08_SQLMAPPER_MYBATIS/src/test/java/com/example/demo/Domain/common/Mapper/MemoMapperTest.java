@@ -15,7 +15,7 @@ import java.util.Map;
 @SpringBootTest
 class MemoMapperTest {
     @Autowired
-    private MemoMapper memoMapper;
+    private com.example.demo.Domain.Common.Mapper.MemoMapper memoMapper;
 
     @Test
     public void t1(){

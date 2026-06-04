@@ -1,7 +1,6 @@
 package com.example.demo.Domain.Common.Entity;
 
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +19,8 @@ public class Memo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 1024)
+    private String title;
     @Column(length = 1024)
     private String text;
     @Column(length = 100, nullable = false)

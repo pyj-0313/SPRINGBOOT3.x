@@ -3,17 +3,29 @@ package com.example.demo.Controller;
 
 import com.example.demo.Domain.Common.Daos.MemoDAO;
 import com.example.demo.Domain.Common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Dtos.PageDTO;
+import com.example.demo.Domain.Common.Entity.Memo;
+import com.example.demo.Domain.Common.Repository.MemoRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -22,6 +34,10 @@ public class MemoController {
 
     @Autowired
     private MemoDAO memoDAO;
+
+    @Autowired
+    private MemoRepository memoRepository;
+
 
     @ExceptionHandler
     public String SQLExceptionHandler(Exception e, Model model){
@@ -61,17 +77,35 @@ public class MemoController {
     }
 
     @GetMapping("/list")
-    public void list_get(Model model) throws SQLException {
-        log.info("GET /memo/list...");
-        model.addAttribute("list",memoDAO.selectAll());
+    public void list_get(PageDTO pageDTO, Model model) throws SQLException {
+        log.info("GET /memo/list..."+pageDTO);
+        //파라미터
+
+        //유효성
+
+        //서비스(+페이징처리)
+        int pageNo = 0;     //현재 pageNo
+        int amount = 10;    //한페이지 표시할 게시물 건수
+
+        Pageable pageable = PageRequest.of(pageNo,amount, Sort.by("id").descending());
+        Page<Memo> page =  memoRepository.findAll(pageable);
+
+        model.addAttribute("page",page);
+        model.addAttribute("list",page.getContent());
+
+//        model.addAttribute("list",memoDAO.selectAll());
+//        model.addAttribute("list",memoRepository.findAll());
+        //뷰
     }
 
     @GetMapping("/update")
     public void memo_update(Long id,Model model) throws SQLException {
         log.info("GET /memo/update...." + id);
-        MemoDTO memoDTO = memoDAO.selectOne(id);
-        if(memoDTO!=null)
-            model.addAttribute("dto",memoDTO);
+//        MemoDTO memoDTO = memoDAO.selectOne(id);
+        Optional<Memo> memoOp = memoRepository.findById(id);
+
+        if(memoOp.isPresent())
+            model.addAttribute("dto",memoOp.get());
         else
             ;
 
@@ -82,12 +116,19 @@ public class MemoController {
         //1 파라미터
         //2 유효성
         //3 서비스(수정)
-        int result = memoDAO.update(dto);
+//        int result = memoDAO.update(dto);
+        Memo memo = Memo.builder()
+                .id(dto.getId())
+                .text(dto.getText())
+                .title(dto.getTitle())
+                .writer(dto.getWriter())
+                .createAt(LocalDateTime.now())
+                .build();
+        memoRepository.save(memo);
+        redirectAttributes.addFlashAttribute("message",dto.getId() + "업데이트 성공!");
+
         //4 뷰로이동(+값, +메시지)
-        if(result>0) {
-            redirectAttributes.addFlashAttribute("message",dto.getId() + "업데이트 성공!");
-        }else
-            redirectAttributes.addFlashAttribute("message",dto.getId() + "업데이트 실패!");
+
         return "redirect:/memo/list";
     }
 
@@ -95,11 +136,9 @@ public class MemoController {
     public String memo_delete(Long id,RedirectAttributes redirectAttributes) throws SQLException {
         log.info("GET /memo/delete...." + id);
 
-        int result = memoDAO.delete(id);
-        if(result>0)
-            redirectAttributes.addFlashAttribute("message",id + "삭제 성공!");
-        else
-            redirectAttributes.addFlashAttribute("message",id + "삭제 실패!");
+//        int result = memoDAO.delete(id);
+        memoRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("message",id + "삭제 성공!");
         return "redirect:/memo/list";
     }
 
