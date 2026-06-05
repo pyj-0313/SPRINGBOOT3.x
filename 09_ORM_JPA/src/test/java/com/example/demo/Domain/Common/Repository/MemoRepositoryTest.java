@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class MemoRepositoryTest {
 
@@ -29,7 +31,7 @@ class MemoRepositoryTest {
 
     @Test
     public void t2(){
-        Memo memo = new Memo(4L,"","text!!!","a!!!@a.com", LocalDateTime.now());
+        Memo memo = new Memo(1L,"","text!!!","a!!!@a.com", LocalDateTime.now());
         System.out.println(memo);
         memoRepository.save(memo);
         System.out.println(memo);
@@ -52,7 +54,7 @@ class MemoRepositoryTest {
         list.forEach(System.out::println);
     }
 
-    //    페이징 처리
+//    페이징 처리
     @BeforeEach
     public void post1000(){
         if(memoRepository.count()==0){
@@ -69,7 +71,7 @@ class MemoRepositoryTest {
 
         Pageable pageable = PageRequest.of(99,10);
         Page<Memo> page =  memoRepository.findAll(pageable);
-
+//
         System.out.println("현재 페이지 번호 : "+page.getNumber());
         System.out.println("한페이지에 표시할 건수 : "+page.getSize());
         System.out.println("총게시물 개수 : "+page.getTotalElements());
@@ -77,7 +79,7 @@ class MemoRepositoryTest {
         System.out.println("첫번째 페이지인지 여부 : "+page.isFirst());
         System.out.println("다음페이지가 있는지 여부 : "+page.hasNext());
         System.out.println("이전페이지가 있는지 여부 : "+page.hasPrevious());
-
+//
         List<Memo> list =  page.getContent();
         list.forEach(System.out::println);
         System.out.println("---");
@@ -85,6 +87,8 @@ class MemoRepositoryTest {
         Page<Memo> nextPage = memoRepository.findAll(page.nextPageable());
         // 이전페이지로 이동
         Page<Memo> previousPage = memoRepository.findAll(page.previousPageable());
+
+
     }
 
 }

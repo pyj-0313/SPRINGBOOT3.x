@@ -18,11 +18,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.beans.PropertyEditorSupport;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Controller
@@ -38,9 +42,10 @@ public class MemoController {
 
 
     @ExceptionHandler
-    public String SQLExceptionHandler(Exception e, Model model){
+    public String SQLExceptionHandler(Exception e , Model model){
         log.error("MEMO SQLEXCEPTION.." + e);
         model.addAttribute("ex",e.getMessage());
+        e.printStackTrace();
         return "memo/error";
     }
 
@@ -56,14 +61,13 @@ public class MemoController {
 //        log.info("BindingResult : " + result);
 
         //2. 유효성 검증
-        if (bindingResult.hasErrors()) {
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                log.info("Error Field : " + error.getField() + " Error Message : " + error.getDefaultMessage());
-                model.addAttribute(error.getField(), error.getDefaultMessage());
+        if(bindingResult.hasErrors()){
+            for(FieldError error  : bindingResult.getFieldErrors()){
+                log.info("Error Field : "+error.getField()+" Error Message : "+error.getDefaultMessage());
+                model.addAttribute(error.getField(),error.getDefaultMessage());
             }
             return "memo/add";
         }
-//            log.info("ERROR FIELD : " + result.getFieldError("id").getDefaultMessage());
 
         //3. 서비스 실행
 //        int result = memoDAO.insert(memoDTO);
@@ -77,7 +81,7 @@ public class MemoController {
         memoRepository.save(memo);
 
         //4. 뷰로 이동(+값)
-        redirectAttributes.addFlashAttribute("message","메모추가 성공");
+        redirectAttributes.addFlashAttribute("message","메모추가 성공!");
         return "redirect:/memo/list";
     }
 
@@ -105,13 +109,14 @@ public class MemoController {
         Pageable pageable = PageRequest.of(pageNo,amount, Sort.by("id").descending());
         Page<Memo> page =  memoRepository.findAll(pageable);
         PageBlock pageBlock = new PageBlock(pageDTO,page);
-
+        System.out.println("pageBlock " + pageBlock);
         model.addAttribute("page",page);
         model.addAttribute("list",page.getContent());
         model.addAttribute("pageBlock",pageBlock);
 
 //        model.addAttribute("list",memoDAO.selectAll());
 //        model.addAttribute("list",memoRepository.findAll());
+
         //뷰
     }
 
@@ -125,10 +130,9 @@ public class MemoController {
             model.addAttribute("dto",memoOp.get());
         else
             ;
-
     }
     @PostMapping("/update")
-    public String memo_update_post(MemoDTO dto,Model model, RedirectAttributes redirectAttributes) throws SQLException {
+    public String memo_update_post(MemoDTO dto,Model model,RedirectAttributes redirectAttributes) throws SQLException {
         log.info("GET /memo/update...." + dto);
         //1 파라미터
         //2 유효성
@@ -142,9 +146,9 @@ public class MemoController {
                 .createAt(LocalDateTime.now())
                 .build();
         memoRepository.save(memo);
-        redirectAttributes.addFlashAttribute("message",dto.getId() + "업데이트 성공!");
+        redirectAttributes.addFlashAttribute("message",dto.getId() + " 업데이트 성공!");
 
-        //4 뷰로이동(+값, +메시지)
+        //4 뷰로이동(+값 , +메시지)
 
         return "redirect:/memo/list";
     }
@@ -155,11 +159,11 @@ public class MemoController {
 
 //        int result = memoDAO.delete(id);
         memoRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("message",id + "삭제 성공!");
+        redirectAttributes.addFlashAttribute("message",id + " 삭제 성공!");
+
         return "redirect:/memo/list";
     }
 
 
+
 }
-
-

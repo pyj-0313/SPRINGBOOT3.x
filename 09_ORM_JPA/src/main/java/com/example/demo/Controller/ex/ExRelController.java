@@ -3,16 +3,14 @@ package com.example.demo.Controller.ex;
 
 import com.example.demo.Domain.Common.Entity.ex.ExBoard;
 import com.example.demo.Domain.Common.Entity.ex.ExReply;
+
 import com.example.demo.Domain.Common.Repository.ex.ExBoardRepository;
 import com.example.demo.Domain.Common.Repository.ex.ExReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -67,16 +65,13 @@ public class ExRelController {
     @GetMapping("/board")
     public String page(@RequestParam(required = false) Long boardId, Model model) {
         log.info("GET /exrel... boardId=" + boardId);
-        // TODO 1: model.addAttribute("boards", exBoardRepository.findAll());
+
         model.addAttribute("boards", exBoardRepository.findAll());
-        // TODO 2: if (boardId != null) {
-        //             model.addAttribute("board", exBoardRepository.findById(boardId).orElse(null));
-        //             model.addAttribute("replies", exReplyRepository.findByBoard_Id(boardId));
-        //         }
+
          if (boardId != null) {
                      model.addAttribute("board", exBoardRepository.findById(boardId).orElse(null));
                      model.addAttribute("replies", exReplyRepository.findByBoard_Id(boardId));
-                 }
+         }
         return "exrel/board";
     }
 
@@ -87,8 +82,9 @@ public class ExRelController {
                            @RequestParam String content,
                            RedirectAttributes redirectAttributes) {
         log.info("POST /exrel/board... title=" + title);
-        // TODO: exBoardRepository.save(ExBoard.builder().title(title).content(content).build());
+
         exBoardRepository.save(ExBoard.builder().title(title).content(content).build());
+
         redirectAttributes.addFlashAttribute("msg", "게시글 등록!");
         return "redirect:/exrel/board";
     }
@@ -101,8 +97,6 @@ public class ExRelController {
                            RedirectAttributes redirectAttributes) {
         log.info("POST /exrel/reply... boardId=" + boardId);
         // TODO:
-        //  ExBoard board = exBoardRepository.findById(boardId).orElseThrow();
-        //  exReplyRepository.save(ExReply.builder().content(content).board(board).build());
         ExBoard board = exBoardRepository.findById(boardId).orElseThrow();
         exReplyRepository.save(ExReply.builder().content(content).board(board).build());
         redirectAttributes.addFlashAttribute("msg", "댓글 등록!");

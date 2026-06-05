@@ -20,6 +20,7 @@ public class DataSourceConfigTest {
 //    @Autowired
 //    private DataSource dataSource;
 //
+//
 //    @Test
 //    public void t1() throws SQLException {
 //        assertNotNull(dataSource);
@@ -27,14 +28,13 @@ public class DataSourceConfigTest {
 //
 //        Connection conn = dataSource.getConnection();
 //        PreparedStatement pstmt = conn.prepareStatement("insert into tbl_memo values(?,?,?,?,?)");
-//        pstmt.setLong(1,1L);
+//        pstmt.setLong(1,2L);
 //        pstmt.setString(2,"제목1");
 //        pstmt.setString(3,"example@example.com");
 //        pstmt.setString(4,"내용~~~1");
 //        pstmt.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
 //        int result = pstmt.executeUpdate();
 //    }
-
     @Autowired
     private DataSource dataSource;
 

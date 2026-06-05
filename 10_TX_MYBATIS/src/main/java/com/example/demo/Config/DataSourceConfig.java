@@ -1,5 +1,6 @@
 package com.example.demo.Config;
 
+
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,8 @@ public class DataSourceConfig {
 //        dataSource.setUrl("jdbc:mysql://localhost:3306/testdb");
 //        dataSource.setUsername("root");
 //        dataSource.setPassword("1234");
-////        dataSource.setInitialSize(5);//초기 연결계수
-////        dataSource.setMaxTotal(10);//최대 연결계수
+////        dataSource.setInitialSize(5);//초기 연결개수
+////        dataSource.setMaxTotal(10);//최대 연결 개수
 ////        dataSource.setMaxIdle(8);//최대 유휴 연결 수
 ////        dataSource.setMinIdle(3);//최소 유휴 연결 수
 //        return dataSource;

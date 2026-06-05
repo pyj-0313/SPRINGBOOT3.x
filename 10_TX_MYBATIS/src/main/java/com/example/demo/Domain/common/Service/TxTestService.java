@@ -1,6 +1,8 @@
-package com.example.demo.Domain.common.Service;
+package com.example.demo.Domain.Common.Service;
 
 
+import com.example.demo.Domain.Common.Dtos.MemoDTO;
+import com.example.demo.Domain.Common.Mapper.MemoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,11 @@ import java.time.LocalDateTime;
 public class TxTestService {
 
     @Autowired
-    private com.example.demo.Domain.Common.Mapper.MemoMapper memoMapper;
+    private MemoMapper memoMapper;
 
     public void addMemo() throws Exception{
         log.info("TxTestService's addMemo() invoke!!");
-        Memo memo = Memo.builder()
+        MemoDTO memo = MemoDTO.builder()
                 .id(null)
                 .text("addMemoTx...")
                 .writer("a@a.com")
@@ -34,9 +36,9 @@ public class TxTestService {
     }
 
     @Transactional(rollbackFor = SQLException.class,transactionManager = "dataSourceTransactionManager")
-    public void addMemoTx() throws Exception {
-        log.info("TxTestService's addMemo() invoke!!");
-        Memo memo = Memo.builder()
+    public void addMemoTx() throws Exception{
+        log.info("TxTestService's addMemoTx() invoke!!");
+        MemoDTO memo = MemoDTO.builder()
                 .id(null)
                 .text("addMemoTx...")
                 .writer("a@a.com")
@@ -49,7 +51,6 @@ public class TxTestService {
         memoMapper.insert(memo);
         memo.setId(null);
         throw new SQLException();
+
     }
-
-
 }

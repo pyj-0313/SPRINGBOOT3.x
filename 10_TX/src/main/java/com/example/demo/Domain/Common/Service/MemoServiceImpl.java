@@ -26,14 +26,15 @@ public class MemoServiceImpl implements MemoService {
     private MemoRepository memoRepository;
 
     //메모등록
-    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
     @Override
+    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
     public boolean memoRegistration(MemoDTO memoDTO) throws Exception{
         memoDTO.setCreateAt(LocalDateTime.now());
         memoRepository.save(memoDTO.toEntity());
         return true;
     }
 
+    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
     public Map<String,Object> getMemoList(PageDTO pageDTO) throws Exception{
 
         Map<String,Object> returnValue = new HashMap<>();
@@ -63,8 +64,9 @@ public class MemoServiceImpl implements MemoService {
     }
 
 
-    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
+
     @Override
+    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
     public MemoDTO getMemo(Long id) throws Exception {
         Optional<Memo> memoOptional = memoRepository.findById(id);
         if(memoOptional.isPresent()){
@@ -72,18 +74,20 @@ public class MemoServiceImpl implements MemoService {
         }
         return null;
     }
-    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
+
     @Override
+    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
     public boolean updateMemo(MemoDTO dto) throws Exception {
 
         memoRepository.save(dto.toEntity());
 
         return dto.getId()>0;
     }
-    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
+
     @Override
+    @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
     public boolean removeMemo(Long id) throws Exception {
-        memoRepository.deleteById(id);
+         memoRepository.deleteById(id);
 
         return true;
     }

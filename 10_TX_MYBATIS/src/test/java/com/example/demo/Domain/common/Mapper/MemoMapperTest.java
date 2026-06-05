@@ -11,22 +11,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class MemoMapperTest {
     @Autowired
-    private com.example.demo.Domain.Common.Mapper.MemoMapper memoMapper;
+    private MemoMapper memoMapper;
 
     @Test
     public void t1(){
         memoMapper.insert(new MemoDTO(55L,"TITLE55","a@a.com","text55", LocalDateTime.now()));
     }
-
     @Test
     public void t2(){
-        memoMapper.update(new MemoDTO(55L,null,null,"text55!!!!!!!!!", null));
+        memoMapper.update(new MemoDTO(55L,null,null,"text55!!!!", null));
     }
-
     @Test
     public void t3(){
         memoMapper.delete(55L);
@@ -34,8 +33,8 @@ class MemoMapperTest {
 
     @Test
     public void t4(){
-        List<MemoDTO> list = memoMapper.selectALL();
-        list.forEach(System.out::println);
+       List<MemoDTO> list  = memoMapper.selectALL();
+       list.forEach(System.out::println);
     }
 
     @Test
@@ -48,13 +47,12 @@ class MemoMapperTest {
 
     @Test
     public void t6(){
-        List<Map<String, Object>> list = memoMapper.selectAllWithResultMap();
+        List<Map<String,Object>> list  = memoMapper.selectAllWithResultMap();
         list.forEach(System.out::println);
     }
-
     @Test
     public void t7(){
-        List<MemoDTO> list = memoMapper.selectAllContains("text","a");
+        List<MemoDTO> list  = memoMapper.selectAllContains("text","a");
         list.forEach(System.out::println);
     }
 
@@ -62,41 +60,35 @@ class MemoMapperTest {
     public void t8(){
         memoMapper.insertXML(new MemoDTO(null,"TITLE88","a@a.com","text55", LocalDateTime.now()));
     }
-
     @Test
     public void t9(){
-        memoMapper.updateXML(new MemoDTO(55L,null,null,"text55!!!!!!!!!", null));
+        memoMapper.updateXML(new MemoDTO(55L,null,null,"text55!!!!", null));
     }
-
     @Test
     public void t10(){
         memoMapper.deleteXML(55L);
     }
-
     @Test
     public void t11(){
-        MemoDTO memoDTO = memoMapper.selectOneXML(13L);
+        MemoDTO memoDTO = memoMapper.selectOneXML(19L);
         System.out.println(memoDTO);
     }
-
     @Test
     public void t12(){
-        List<MemoDTO> list = memoMapper.selectAllXML();
+        List<MemoDTO> list  = memoMapper.selectAllXML();
         list.forEach(System.out::println);
     }
-
     @Test
     public void t13(){
-        List<Map<String,Object>> list = memoMapper.selectAllMapXML();
+        List< Map<String,Object> > list  = memoMapper.selectAllMapXML();
         list.forEach(System.out::println);
     }
-
     //
     @Test
     public void t14(){
         Map<String,Object> param = new HashMap();
         param.put("type","text");
-        param.put("keyword","5");
+        param.put("keyword","a");
         List< Map<String,Object> > list =  memoMapper.selectAllIfXML(param);
         System.out.println("TOTAL : " + list.size());
         list.forEach(System.out::println);

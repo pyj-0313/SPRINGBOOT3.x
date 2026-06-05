@@ -36,8 +36,8 @@ public class TxTestService {
     }
 
     @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
-    public void addMemoTx() throws Exception {
-        log.info("TxTestService's addMemo() invoke!!");
+    public void addMemoTx() throws Exception{
+        log.info("TxTestService's addMemoTx() invoke!!");
         Memo memo = Memo.builder()
                 .id(null)
                 .text("addMemoTx...")
@@ -51,7 +51,6 @@ public class TxTestService {
         memoRepository.save(memo);
         memo.setId(null);
         throw new SQLException();
+
     }
-
-
 }

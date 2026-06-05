@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+
 @SpringBootTest
 class MemoDAOTest {
     @Autowired
@@ -14,6 +17,7 @@ class MemoDAOTest {
 
     @Test
     public void t1() throws SQLException {
-        memoDAO.insert((new MemoDTO(null,"제목!","ex@ex.com","내용!",null)));
+        memoDAO.insert(new MemoDTO(null,"제목!","ex@ex.com","내용!",null));
     }
+
 }

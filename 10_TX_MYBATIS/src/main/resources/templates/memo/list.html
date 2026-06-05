@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+
     <h1>PAGE : /memo/list </h1>
 
     <a href="/memo/add">메모추가</a>
@@ -13,7 +14,7 @@
         <tr>
             <th>ID</th>
             <th>TEXT</th>
-            <th>WIRTER</th>
+            <th>WRITER</th>
             <th>CREATEAT</th>
             <th>관리</th>
         </tr>
@@ -24,8 +25,8 @@
                 <td th:text="${dto.writer}"></td>
                 <td th:text="${dto.createAt}"></td>
                 <td>
-                    <a th:href="@{/memo/update(id=${dto.id})}">수정</a>
-                    <a th:href="@{/memo/delete(id=${dto.id})}">삭제</a>
+                    <a href="javascript:void(0)">수정</a>
+                    <a href="javascript:void(0)">삭제</a>
                 </td>
             </tr>
         </th:block>

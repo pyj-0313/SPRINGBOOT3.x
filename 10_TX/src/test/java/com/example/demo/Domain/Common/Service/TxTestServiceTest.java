@@ -6,17 +6,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-
 @SpringBootTest
 class TxTestServiceTest {
 
     @Autowired
-    public TxTestService txTestService;
+    private TxTestService txTestService;
 
     @Test
-    public void t1() throws Exception {
+    public void t1() throws Exception{
 //        txTestService.addMemo();
         txTestService.addMemoTx();
     }
+
+
+
 }

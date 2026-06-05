@@ -15,8 +15,5 @@ import org.springframework.stereotype.Repository;
  * ============================================================
  */
 @Repository
-public interface ExBoardRepository extends JpaRepository<ExBoard, Long> /* TODO: extends JpaRepository<ExBoard, Long> */ {
-
-
-
+public interface ExBoardRepository extends JpaRepository<ExBoard, Long> {
 }

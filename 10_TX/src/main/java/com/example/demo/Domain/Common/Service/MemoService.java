@@ -3,6 +3,7 @@ package com.example.demo.Domain.Common.Service;
 import com.example.demo.Domain.Common.Dtos.MemoDTO;
 import com.example.demo.Domain.Common.Dtos.PageDTO;
 
+import java.util.List;
 import java.util.Map;
 
 public interface MemoService {
@@ -18,3 +19,4 @@ public interface MemoService {
 
     boolean removeMemo(Long id) throws Exception;
 }
+

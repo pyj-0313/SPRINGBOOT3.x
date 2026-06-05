@@ -18,10 +18,10 @@ class BookRepositoryTest {
     public void t1(){
         bookRepository.save(new Book(1L,"t1","p1","1111"));
     }
-
     @Test
     public void t2(){
         List<Book> list = bookRepository.findByBookName("t1");
         list.forEach(System.out::println);
+
     }
 }

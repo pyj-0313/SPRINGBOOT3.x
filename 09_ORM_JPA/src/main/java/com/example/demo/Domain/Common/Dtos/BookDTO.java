@@ -1,7 +1,6 @@
 package com.example.demo.Domain.Common.Dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
 public class BookDTO {
     private Long id;        // 도서 번호 (PK)
     private String title;   // 제목

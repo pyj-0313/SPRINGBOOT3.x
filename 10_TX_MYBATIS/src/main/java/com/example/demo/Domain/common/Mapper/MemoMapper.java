@@ -18,13 +18,14 @@ public interface MemoMapper {
     public int update(MemoDTO memoDTO);
 
     @Delete("delete from tbl_memo where id=#{id}")
-    public int delete(long memoDTO);
+    public int delete(Long id);
 
     @Select("select * from tbl_memo")
     public List<MemoDTO> selectALL();
 
     @Select("select * from tbl_memo where ${type} like concat('%',#{keyword},'%')")
     public List<MemoDTO> selectAllContains(@Param(value = "type") String type,String keyword);
+
 
     @Results(id="MemoResultMap",value={
             @Result(property = "text",column = "text"),
@@ -33,18 +34,16 @@ public interface MemoMapper {
     @Select("select text,writer from tbl_memo")
     public List<Map<String,Object>> selectAllWithResultMap();
 
-    //xml
+    //XML
     public int insertXML(MemoDTO memoDTO);
     public int updateXML(MemoDTO memoDTO);
-    public int deleteXML(long memoDTO);
-    public MemoDTO selectOneXML(long id);
+    public int deleteXML(Long id);
+    public MemoDTO selectOneXML(Long id);
     public List<MemoDTO> selectAllXML();
-    public List<Map<String,Object>> selectAllMapXML();
+    public List< Map<String,Object> > selectAllMapXML();
     //
     public List< Map<String,Object> > selectAllIfXML(Map<String,Object> param);
     public List< Map<String,Object> > selectAllChooseXML(Map<String,Object> param);
     public List< Map<String,Object> > selectAllIfAndXML(Map<String,Object> param);
     public List< Map<String,Object> > selectForEachAnd(Map<String,Object> param);
-
-
 }

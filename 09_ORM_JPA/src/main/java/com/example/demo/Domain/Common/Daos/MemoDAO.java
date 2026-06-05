@@ -13,35 +13,33 @@ import java.util.List;
 @Repository
 public class MemoDAO {
     @Autowired
-    private DataSource dataSource3;
+    private DataSource dataSource;
     //CRUD FUNCTION
     public int insert(MemoDTO dto) throws SQLException {
 
         try(
-                Connection conn = dataSource3.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement("insert into tbl_memo values(null,?,?,?,?)");
-                ){
-              pstmt.setString(1,dto.getTitle());
-             pstmt.setString(2,dto.getWriter());
-             pstmt.setString(3,dto.getText());
-             pstmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
-             int result = pstmt.executeUpdate();
-             return result;
+                Connection conn = dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("insert into tbl_memo values(null,?,?,?,?)")
+           ){
+            pstmt.setString(1,dto.getTitle());
+            pstmt.setString(2,dto.getWriter());
+            pstmt.setString(3,dto.getText());
+            pstmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
+            int result = pstmt.executeUpdate();
+            return result;
         }
-
 
     }
     public List<MemoDTO> selectAll() throws SQLException{
 
-        try(     Connection conn = dataSource3.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement("select * from tbl_memo order by id desc");
-
-                ){
-
-            ResultSet rs = pstmt.executeQuery();
+        try(
+                Connection conn = dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("select * from tbl_memo order by id desc");
+                ResultSet rs = pstmt.executeQuery();
+           ){
             List<MemoDTO> list = new ArrayList<>();
             MemoDTO dto = null;
-            while(rs.next()){
+            while(rs.next()) {
                 dto = MemoDTO.builder()
                         .id(rs.getLong("id"))
                         .title(rs.getString("title"))
@@ -58,14 +56,17 @@ public class MemoDAO {
 
     }
 
+
     public MemoDTO selectOne(Long id) throws SQLException {
 
         try(
-            Connection conn = dataSource3.getConnection();
+            Connection conn = dataSource.getConnection();
             PreparedStatement pstmt = conn.prepareStatement("select * from tbl_memo where id=?");
 
         ) {
-            pstmt.setLong(1, id);
+
+            pstmt.setLong(1,id);
+
             try(ResultSet rs = pstmt.executeQuery();) {
                 MemoDTO dto = null;
                 if (rs.next()) {
@@ -84,7 +85,7 @@ public class MemoDAO {
 
     public int update(MemoDTO dto) throws SQLException {
         try(
-        Connection conn = dataSource3.getConnection();
+        Connection conn = dataSource.getConnection();
         PreparedStatement pstmt = conn.prepareStatement("update tbl_memo set title=?,text=?,writer=? where id=?");
         ) {
             pstmt.setString(1, dto.getTitle());
@@ -98,7 +99,7 @@ public class MemoDAO {
 
     public int delete(Long id) throws SQLException {
         try(
-        Connection conn = dataSource3.getConnection();
+        Connection conn = dataSource.getConnection();
         PreparedStatement pstmt = conn.prepareStatement("delete from tbl_memo where id=?");
         ) {
             pstmt.setLong(1, id);
@@ -106,5 +107,6 @@ public class MemoDAO {
             return result;
         }
     }
-}
 
+
+}

@@ -19,7 +19,6 @@
     -->
     <select id="selectAllXML" resultType="com.example.demo.Domain.Common.Dtos.ProductDTO">
         <!-- TODO: select * from tbl_product -->
-        select * from tbl_product
     </select>
 
 
@@ -34,7 +33,7 @@
     -->
     <select id="searchXML" resultType="java.util.Map" parameterType="java.util.Map">
         select * from tbl_product
-
+        <!--
         <where>
             <if test="keyword != null and keyword != ''">
                 pname like concat('%', #{keyword}, '%')
@@ -43,7 +42,7 @@
                 and stock &gt;= #{minStock}
             </if>
         </where>
-
+        -->
     </select>
 
 </mapper>

@@ -1,6 +1,5 @@
 package com.example.demo.Domain.Common.Repository;
 
-
 import com.example.demo.Domain.Common.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +22,5 @@ public interface UserRepository extends JpaRepository<User,String> {
 
     @Query("SELECT u FROM User as u where u.username like concat('%',:user,'%')")
     List<User> selectAllLikeUsername(@Param("user") String username);
-
 
 }

@@ -27,28 +27,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-// TODO: @Entity / @Table(name="ex_reply")
 @Entity
 @Table(name="ex_reply")
 public class ExReply {
 
-    // TODO: @Id / @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: @Column(length=1000, nullable=false)
-    @Column(length=1000, nullable = false)
+    @Column(length=1000, nullable=false)
     private String content;
 
     // [관계매핑] 여러 댓글(N) -> 하나의 게시글(1)
-    // TODO: @ManyToOne / @JoinColumn(name="board_id")
     @ManyToOne
     @JoinColumn(
             name="board_id",
             foreignKey = @ForeignKey(
-                    name="FK_LEND_BOARD",
-                    foreignKeyDefinition = "FOREIGN KEY (board_id) REFERENCES ex_Board(id) ON DELETE CASCADE ON UPDATE CASCADE"
+                    name="FK_REPLY_BOARD",
+                    foreignKeyDefinition = "FOREIGN KEY (board_id) REFERENCES ex_board(id) ON DELETE CASCADE ON UPDATE CASCADE"
             )
     )
     private ExBoard board;

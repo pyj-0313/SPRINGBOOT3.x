@@ -24,20 +24,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-// TODO: @Entity / @Table(name="ex_board")
 @Entity
 @Table(name="ex_board")
 public class ExBoard {
-    // TODO: @Id / @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //id값을 DB가 자동으로 증가시켜서 생성해주는 어노테이션
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: @Column(length=200, nullable=false)
-    @Column(length=200, nullable=false) //길이200을 가진 notnull title 속성 생성
+    @Column(length=200, nullable=false)
     private String title;
 
-    // TODO: @Column(length=2000)
-    @Column(length=2000) //길이2000을 가진 null을 허용하는 content 속성 생성
+    @Column(length=2000)
     private String content;
 }

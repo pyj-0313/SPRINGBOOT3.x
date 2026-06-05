@@ -1,6 +1,5 @@
 package com.example.demo.Domain.Common.Repository;
 
-
 import com.example.demo.Domain.Common.Entity.Lend;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,8 +11,8 @@ import java.util.List;
 @Repository
 public interface LendRepository extends JpaRepository<Lend,Long> {
     @Query("SELECT l FROM Lend AS l JOIN FETCH l.user WHERE l.user.username=:username")
-    List<Lend> findAllendsByUser(@Param("username") String username);
+    List<Lend> findAllLendsByUser(@Param("username") String username);
 
     @Query("SELECT l FROM Lend AS l JOIN FETCH l.book WHERE l.book.bookName=:bookName")
-    List<Lend> findAllendsByBook(@Param("bookName") String bookName);
+    List<Lend> findAllLendsByBook(@Param("bookName") String bookName);
 }

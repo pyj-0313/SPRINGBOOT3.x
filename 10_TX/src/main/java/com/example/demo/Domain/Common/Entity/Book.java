@@ -1,7 +1,5 @@
 package com.example.demo.Domain.Common.Entity;
 
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -22,5 +20,4 @@ public class Book {
     private String bookName;
     private String publisher;
     private String isbn;
-
 }

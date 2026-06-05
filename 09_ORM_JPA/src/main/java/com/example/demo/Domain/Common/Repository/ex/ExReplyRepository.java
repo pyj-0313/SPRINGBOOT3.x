@@ -21,8 +21,7 @@ import java.util.List;
  * ============================================================
  */
 @Repository
-public interface ExReplyRepository extends JpaRepository<ExReply, Long> /* TODO: extends JpaRepository<ExReply, Long> */ {
-    // TODO: [EX05] List<ExReply> findByBoard_Id(Long boardId);
-    List<ExReply> findByBoard_Id(Long boardId);
+public interface ExReplyRepository extends JpaRepository<ExReply, Long> {
 
+    List<ExReply> findByBoard_Id(Long boardId);
 }

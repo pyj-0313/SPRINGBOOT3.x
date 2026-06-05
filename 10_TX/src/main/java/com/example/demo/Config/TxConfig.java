@@ -1,6 +1,5 @@
 package com.example.demo.Config;
 
-
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +14,9 @@ import javax.sql.DataSource;
 public class TxConfig {
     @Autowired
     private DataSource dataSource;
-    // JAP Tx
+    // JPA Tx
     @Bean(name="jpaTransactionManager")
-    public JpaTransactionManager jpaTransactionManager(EntityManagerFactory entityManagerFactory){
+    public JpaTransactionManager jpaTransactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         transactionManager.setDataSource(dataSource);

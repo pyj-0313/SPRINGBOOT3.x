@@ -20,12 +20,14 @@ repositories {
 
 dependencies {
 
+	// THYMELEAF
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	//
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//
-	compileOnly 'org.projectlombok:lombok'
 
+	// SPRING STARTER MODULE
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// LOMBOK
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
@@ -39,7 +41,7 @@ dependencies {
 	// BASICDATASOURCE
 //	implementation 'org.apache.commons:commons-dbcp2:2.14.0'
 
-	// MYBATIS
+	//MYBATIS
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
 
@@ -54,6 +56,7 @@ dependencies {
 
 	// JUNIT
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 tasks.named('test') {

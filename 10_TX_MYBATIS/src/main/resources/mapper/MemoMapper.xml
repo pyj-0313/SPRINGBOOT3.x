@@ -8,14 +8,13 @@
     </insert>
 
     <update id="updateXML">
-        update tbl_memo set text=#{text} where id=#{id}
+        update tbl_memo set text=#{text},writer=#{writer} where id=#{id}
     </update>
 
     <delete id="deleteXML">
         delete from tbl_memo where id=#{id}
     </delete>
-
-    <select id="selectOneXML" resultType="com.example.demo.Domain.Common.Dtos.MemoDTO" parameterType="Long">
+    <select id="selectOneXML" resultType="com.example.demo.Domain.Common.Dtos.MemoDTO" parameterType="long">
         select * from tbl_memo where id=#{id}
     </select>
 
@@ -26,7 +25,6 @@
     <select id="selectAllMapXML" resultType="java.util.Map">
         select * from tbl_memo
     </select>
-
 
     <!-- 동적쿼리문   -->
     <select id="selectAllIfXML" resultType="java.util.Map" parameterType="java.util.Map">
@@ -100,7 +98,6 @@
             </if>
         </where>
     </select>
-
 
 
 

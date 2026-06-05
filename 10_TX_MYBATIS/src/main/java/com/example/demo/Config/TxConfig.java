@@ -1,7 +1,6 @@
 package com.example.demo.Config;
 
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,7 @@ public class TxConfig {
     private DataSource dataSource;
     // MYBATIS Tx(DEFAULT TX)
     @Bean(name = "dataSourceTransactionManager")
-    public DataSourceTransactionManager transactionManager(){
+    public DataSourceTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource);
     }
 }

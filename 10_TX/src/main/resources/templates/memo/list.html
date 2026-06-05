@@ -5,20 +5,21 @@
     <title>Title</title>
 </head>
 <body>
+
     <h1>PAGE : /memo/list </h1>
 
     <a href="/memo/add">메모추가</a>
     <hr/>
     <table>
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>TITLE</th>
-            <th>TEXT</th>
-            <th>WIRTER</th>
-            <th>CREATEAT</th>
-            <th>관리</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>TITLE</th>
+                <th>TEXT</th>
+                <th>WRITER</th>
+                <th>CREATEAT</th>
+                <th>관리</th>
+            </tr>
         </thead>
         <tbody>
         <th:block th:each="dto:${list}">
@@ -35,21 +36,20 @@
             </tr>
         </th:block>
         </tbody>
-        <tfoot >
-            <!-- 이전     -->
+        <tfoot  >
+            <!-- 이전        -->
             <th:block th:if="${pageBlock.prev}">
-<!--                <a th:href="@{/memo/list(pageNo=${pageBlock.startPage - pageBlock.pagePerBlock})}">이전</a>-->
-                <a th:href="@{/memo/list(pageNo=${pageBlock.nowBlock - 1} * ${pageBlock.pagePerBlock} - ${pageBlock.pagePerBlock})}">이전</a>
+                <a th:href="@{/memo/list(pageNo= ${pageBlock.nowBlock - 1} * ${pageBlock.pagePerBlock} - ${pageBlock.pagePerBlock}  )}">이전</a>
             </th:block>
-
-            <!-- 페이징블럭     -->
-            <th:block th:each="i : ${#numbers.sequence(pageBlock.startPage, pageBlock.endPage)}">
-                <a th:href="@{/memo/list(pageNo=${i})}" th:text="${i+1}"></a>&nbsp;&nbsp;
+            |
+            <!-- 페이징블럭   -->
+            <th:block th:each="i : ${#numbers.sequence(pageBlock.startPage, pageBlock.endPage )}">
+                <a  th:href="@{/memo/list(pageNo=${i})}" th:text="${i+1}"> </a>&nbsp;&nbsp;
             </th:block>
-
-            <!-- 이후     -->
+            |
+            <!-- 이후        -->
             <th:block th:if="${pageBlock.next}">
-                <a th:href="@{/memo/list(pageNo=${pageBlock.startPage + pageBlock.pagePerBlock})}">다음</a>
+                <a th:href="@{/memo/list(pageNo=${pageBlock.startPage + pageBlock.pagePerBlock} )}">다음</a>
             </th:block>
         </tfoot>
     </table>

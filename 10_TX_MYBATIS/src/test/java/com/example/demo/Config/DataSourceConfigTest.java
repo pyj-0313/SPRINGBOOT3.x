@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 public class DataSourceConfigTest {
 
-    //    @Autowired
+//    @Autowired
 //    private DataSource dataSource;
 //
 //

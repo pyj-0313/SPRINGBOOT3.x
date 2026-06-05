@@ -24,16 +24,16 @@ class MybatisConfigTest {
     @Test
     public void t1(){
         assertNotNull(sqlSessionFactory);
-        SqlSession sqlSession = sqlSessionFactory.openSession();
+        SqlSession sqlSession =  sqlSessionFactory.openSession();
         Connection conn = sqlSession.getConnection();
         System.out.println(conn);
-
     }
 
     @Test
     public void t2(){
         assertNotNull(sqlSession);
-        Connection conn = sqlSession.getConnection();
+        Connection conn =  sqlSession.getConnection();
         System.out.println(conn);
     }
+
 }

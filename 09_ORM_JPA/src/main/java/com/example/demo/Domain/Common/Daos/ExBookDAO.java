@@ -3,15 +3,9 @@ package com.example.demo.Domain.Common.Daos;
 
 import com.example.demo.Domain.Common.Dtos.BookDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,9 +37,8 @@ public class ExBookDAO {
 
     // [EX01] TODO: HikariCP 로 만든 dataSource3 빈을 주입받으세요.
     //   - @Autowired
-    @Autowired
     //   - private DataSource dataSource3;
-    private DataSource dataSource3;
+
 
     /*
      * [EX02] 등록 (INSERT)
@@ -56,14 +49,7 @@ public class ExBookDAO {
     public int insert(BookDTO dto) throws SQLException {
         log.info("ExBookDao.insert... " + dto);
         // TODO: Connection -> PreparedStatement -> setXxx -> executeUpdate()
-        Connection conn = dataSource3.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement("insert into tbl_book values(?,?,?,?)");
-        pstmt.setLong(1,dto.getId());
-        pstmt.setString(2,dto.getTitle());
-        pstmt.setString(3,dto.getAuthor());
-        pstmt.setInt(4,dto.getPrice());
-        int result = pstmt.executeUpdate();
-        return result;
+        return 0;
     }
 
 
@@ -75,21 +61,7 @@ public class ExBookDAO {
     public List<BookDTO> findAll() throws SQLException {
         log.info("ExBookDao.findAll...");
         // TODO: 전체 조회 후 List<BookDTO> 반환
-        Connection conn = dataSource3.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement("select id, title, author, price from tbl_book order by id");
-        ResultSet rs = pstmt.executeQuery();
-        List<BookDTO> list = new ArrayList<>();
-        BookDTO dto = null;
-        while(rs.next()){
-            dto = BookDTO.builder()
-                    .id(rs.getLong("id"))
-                    .title(rs.getString("title"))
-                    .author(rs.getString("author"))
-                    .price(rs.getInt("price"))
-                    .build();
-            list.add(dto);
-        }
-        return list;
+        return List.of();
     }
 
 
@@ -101,20 +73,7 @@ public class ExBookDAO {
     public BookDTO findById(Long id) throws SQLException {
         log.info("ExBookDao.findById... id=" + id);
         // TODO: id 로 조회 후 BookDTO 또는 null 반환
-        Connection conn = dataSource3.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement("select id, title, author, price from tbl_book where id=?");
-        pstmt.setLong(1,id);
-        ResultSet rs = pstmt.executeQuery();
-        BookDTO dto = null;
-        if (rs.next()){
-            dto = BookDTO.builder()
-                    .id(rs.getLong("id"))
-                    .title(rs.getString("title"))
-                    .author(rs.getString("author"))
-                    .price(rs.getInt("price"))
-                    .build();
-        }
-        return dto;
+        return null;
     }
 
 
@@ -126,13 +85,7 @@ public class ExBookDAO {
     public int update(BookDTO dto) throws SQLException {
         log.info("ExBookDao.update... " + dto);
         // TODO: UPDATE 실행 후 executeUpdate() 결과 반환
-        Connection conn = dataSource3.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement("update tbl_book set title=?, author=?, price=? where id=?");
-        pstmt.setString(1,dto.getTitle());
-        pstmt.setString(2,dto.getAuthor());
-        pstmt.setInt(3,dto.getPrice());
-        int result = pstmt.executeUpdate();
-        return result;
+        return 0;
     }
 
 
@@ -144,10 +97,6 @@ public class ExBookDAO {
     public int delete(Long id) throws SQLException {
         log.info("ExBookDao.delete... id=" + id);
         // TODO: DELETE 실행 후 executeUpdate() 결과 반환
-        Connection conn = dataSource3.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement("delete from tbl_book where id=?");
-        pstmt.setLong(1,id);
-        int result = pstmt.executeUpdate();
-        return result;
+        return 0;
     }
 }

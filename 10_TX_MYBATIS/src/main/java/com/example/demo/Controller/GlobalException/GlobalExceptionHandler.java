@@ -2,6 +2,7 @@ package com.example.demo.Controller.GlobalException;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +12,7 @@ import java.io.FileNotFoundException;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(FileNotFoundException.class)
     public String exceptionHandler_1(Exception e, Model model){
         log.error("[Global] ExceptionTestController ex1 : " + e);
@@ -25,16 +27,9 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public String exceptionHandler_All(Exception e, Model model){
-        log.error("[Global] etc Exceptions : " + e);
+        log.error("[Global] etc exceptions : " + e);
         model.addAttribute("e",e);
         return "global/error3";
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    public String exceptionHandler(Exception e, Model model){
-        log.error("IllegalStateException ex05 : " + e);
-        model.addAttribute("e",e);
-        return "global/error";
     }
 
 }
