@@ -1,7 +1,9 @@
 package com.example.demo.Domain.Common.Dtos;
 
 
-import jakarta.validation.constraints.*;
+import com.example.demo.Domain.Common.Entity.Memo;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +28,23 @@ public class MemoDTO {
     private String text;
 
     private LocalDateTime createAt;
+
+    public Memo toEntity(){
+        return Memo.builder()
+                .title(this.title)
+                .id(this.id)
+                .writer(this.writer)
+                .text(this.text)
+                .createAt(this.createAt)
+                .build();
+    }
+    public static MemoDTO from(Memo memo){
+        return MemoDTO.builder()
+                .id(memo.getId())
+                .title(memo.getTitle())
+                .writer(memo.getWriter())
+                .text(memo.getText())
+                .createAt(memo.getCreateAt())
+                .build();
+    }
 }

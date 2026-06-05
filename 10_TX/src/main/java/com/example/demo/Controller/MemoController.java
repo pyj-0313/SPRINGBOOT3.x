@@ -7,6 +7,7 @@ import com.example.demo.Domain.Common.Dtos.PageBlock;
 import com.example.demo.Domain.Common.Dtos.PageDTO;
 import com.example.demo.Domain.Common.Entity.Memo;
 import com.example.demo.Domain.Common.Repository.MemoRepository;
+import com.example.demo.Domain.Common.Service.MemoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
@@ -36,6 +40,9 @@ public class MemoController {
     @Autowired
     private MemoRepository memoRepository;
 
+    @Autowired
+    private MemoService memoService;
+
 
     @ExceptionHandler
     public String SQLExceptionHandler(Exception e, Model model){
@@ -50,7 +57,7 @@ public class MemoController {
     }
 
     @PostMapping("/add")
-    public String memoAddPost(@Valid MemoDTO memoDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws SQLException {
+    public String memoAddPost(@Valid MemoDTO memoDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws Exception {
         //1. 파라미터 받기
         log.info("POST /memo/add..." + memoDTO);
 //        log.info("BindingResult : " + result);
@@ -66,15 +73,7 @@ public class MemoController {
 //            log.info("ERROR FIELD : " + result.getFieldError("id").getDefaultMessage());
 
         //3. 서비스 실행
-//        int result = memoDAO.insert(memoDTO);
-        Memo memo = Memo.builder()
-                .id(memoDTO.getId())
-                .text(memoDTO.getText())
-                .title(memoDTO.getTitle())
-                .writer(memoDTO.getWriter())
-                .createAt(LocalDateTime.now())
-                .build();
-        memoRepository.save(memo);
+        boolean isRegistration = memoService.memoRegistration(memoDTO);
 
         //4. 뷰로 이동(+값)
         redirectAttributes.addFlashAttribute("message","메모추가 성공");
