@@ -10,8 +10,8 @@ import java.util.Map;
 @Mapper
 public interface MemoMapper {
 
-    @SelectKey(statement = "SELECT max(id) FROM testdb.tbl_memo",keyProperty = "id",before = false,resultType = Long.class)
-    @Insert("insert into tbl_memo values(#{id},#{title},#{writer},#{text},#{createAt})")
+    @SelectKey(statement = "SELECT max(id) FROM testdb.memo",keyProperty = "id",before = false,resultType = Long.class)
+    @Insert("insert into memo values(#{id},#{title},#{writer},#{text},#{createAt})")
     public int insert(MemoDTO memoDTO);
 
     @Update("update tbl_memo set text=#{text} where id=#{id}")
