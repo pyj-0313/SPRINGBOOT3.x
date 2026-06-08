@@ -5,17 +5,72 @@
     <title>Title</title>
 </head>
 <body>
-    <H1>/MEMO/REST/XHR</H1>
+    <H1>(XHR)/MEMO/REST/XHR</H1>
 
     <!--  LIST   -->
+    <h1>/memo/rest/list</h1>
     <form name="formList" onsubmit="return false">
         <input type="text" name="pageNo" value="0">
         <input type="text" name="amount" value="10">
         <button onclick="getList()">LIST</button>
     </form>
+    <hr/>
     <!--  CREATE   -->
+    <h1>/memo/rest/add</h1>
+    <form method="POST" onsubmit="return false">
+        <div>
+            <label>제목</label>
+            <input name="title" />&nbsp;&nbsp;<span style="font-size:.8rem;" th:text="${title}"></span>
+        </div>
+        <div>
+            <label>작성자</label>
+            <input name="writer" /> &nbsp;&nbsp;<span style="font-size:.8rem;"th:text="${writer}"></span>
+        </div>
+        <div>
+            <label>내용</label>
+            <textarea name="text"></textarea>&nbsp;&nbsp;<span style="font-size:.8rem;" th:text="${text}"></span>
+        </div>
+        <div>
+            <input type="submit" value="저장" />
+        </div>
+    </form>
     <!--  UPDATE   -->
+    <hr/>
+    <h1>/memo/rest/update</h1>
+    <form method="PUT" onsubmit="return false">
+        <div>
+            <label>ID</label>
+            <input name="id"/>
+        </div>
+        <div>
+            <label>제목</label>
+            <input name="title" />&nbsp;&nbsp;<span style="font-size:.8rem;" th:text="${title}"></span>
+        </div>
+        <div>
+            <label>작성자</label>
+            <input name="writer" /> &nbsp;&nbsp;<span style="font-size:.8rem;"th:text="${writer}"></span>
+        </div>
+        <div>
+            <label>내용</label>
+            <textarea name="text"></textarea>&nbsp;&nbsp;<span style="font-size:.8rem;" th:text="${text}"></span>
+        </div>
+        <div>
+            <input type="submit" value="UPDATE" />
+        </div>
+    </form>
     <!--  DELETE   -->
+    <hr/>
+    <h1>/memo/rest/delete</h1>
+    <form method="PUT" onsubmit="return false">
+        <div>
+            <label>ID</label>
+            <input name="id"/>
+        </div>
+
+        <div>
+            <input type="submit" value="DELETE" />
+        </div>
+    </form>
 
     <script>
     <!--   LIST     -->
