@@ -41,13 +41,28 @@ public class Memo_addRest_Controller {
 //    REST HANDLER
 //    ------------------------------------------------------
 
-    @GetMapping("/rest/index")
-    public String restIndex(){
-        log.info("GET /memo/rest/index");
-        return "memo/rest/index";
+    @GetMapping("/rest/xhr")
+    public String restIndex_xhr(){
+        log.info("GET /memo/rest/xhr");
+        return "memo/rest/xhr";
+    }
+    @GetMapping("/rest/fetch")
+    public String restIndex_fetch(){
+        log.info("GET /memo/rest/fetch");
+        return "memo/rest/fetch";
+    }
+    @GetMapping("/rest/ajax")
+    public String restIndex_ajax(){
+        log.info("GET /memo/rest/ajax");
+        return "memo/rest/ajax";
+    }
+    @GetMapping("/rest/axious")
+    public String restIndex_axious(){
+        log.info("GET /memo/rest/axious");
+        return "memo/rest/axious";
     }
     @ResponseBody
-    @GetMapping(value = "/rest/list" ,produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/rest/list" , consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity< Map<String,Object> > rest_list_get(
             PageDTO pageDTO, Model model) throws Exception {
         log.info("GET /rest/list..." + pageDTO);
@@ -66,6 +81,9 @@ public class Memo_addRest_Controller {
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
 
+//    ------------------------------------------------------
+//    REST HANDLER
+//    ------------------------------------------------------
 
 
     @GetMapping("/add")
