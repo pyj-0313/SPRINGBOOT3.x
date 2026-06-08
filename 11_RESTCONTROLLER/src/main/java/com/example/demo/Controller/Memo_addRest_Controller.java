@@ -83,7 +83,7 @@ public class Memo_addRest_Controller {
 
     @ResponseBody
     @PostMapping(value = "/rest/add",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity< Map<String,Object> > memoAddPost_rest(@Valid MemoDTO memoDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws Exception {
+    public ResponseEntity< Map<String,Object> > memoAddPost_rest(@RequestBody @Valid MemoDTO memoDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws Exception {
         Map<String, Object> responseMap = new HashMap<>();
         //1. 파라미터 받기
         log.info("POST /memo/add..." + memoDTO);

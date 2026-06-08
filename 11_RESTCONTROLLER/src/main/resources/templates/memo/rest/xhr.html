@@ -17,7 +17,7 @@
     <hr/>
     <!--  CREATE   -->
     <h1>/memo/rest/add</h1>
-    <form method="POST" onsubmit="return false">
+    <form name="formAdd" method="POST" onsubmit="return false">
         <div>
             <label>제목</label>
             <input name="title" />&nbsp;&nbsp;<span style="font-size:.8rem;" th:text="${title}"></span>
@@ -30,8 +30,9 @@
             <label>내용</label>
             <textarea name="text"></textarea>&nbsp;&nbsp;<span style="font-size:.8rem;" th:text="${text}"></span>
         </div>
+
         <div>
-            <input type="submit" value="저장" />
+            <button onclick="addMemo()">저장</button>
         </div>
     </form>
     <!--  UPDATE   -->
@@ -78,6 +79,7 @@
         const formList = document.formList;
         const pageNo = formList.pageNo.value;
         const amount = formList.amount.value;
+
         var httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function() {
             if (httpRequest.readyState == XMLHttpRequest.DONE && httpRequest.status == 200 ) {
@@ -96,6 +98,31 @@
         httpRequest.open("GET", `/memo/rest/list?pageNo=${pageNo}&amount=${amount}`, true);
         httpRequest.setRequestHeader("Content-Type","application/json");
         httpRequest.send();
+    }
+
+    //ADD
+    function addMemo() {
+        const formAdd = document.formAdd;
+        const title = formAdd.title.value;
+        const text = formAdd.text.value;
+        const writer = formAdd.writer.value;
+        const body={title,text,writer};
+        const jsonBody = JSON.stringify(body);
+        // console.log("body",body);
+        // console.log("jsonBody",jsonBody);
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState == XMLHttpRequest.DONE && httpRequest.status == 200 ) {
+                // document.getElementById("text").innerHTML = httpRequest.responseText;
+                // console.log("list",httpRequest.responseText);
+                const data = JSON.parse(httpRequest.responseText);
+                console.log("data",data);
+            }
+        };
+        // GET 방식으로 요청을 보내면서 데이터를 동시에 전달함.
+        httpRequest.open("POST", `/memo/rest/add`, true);
+        httpRequest.setRequestHeader("Content-Type","application/json");
+        httpRequest.send(jsonBody);
     }
     </script>
 
