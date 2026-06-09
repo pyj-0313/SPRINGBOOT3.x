@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOK REST - jQuery ajax (정답)</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 820px; margin: 20px auto; }
+        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: center; }
+        .err { color: #c00; font-size: 12px; min-height: 16px; }
+        input { padding: 4px; }
+    </style>
+</head>
+<body>
+    <h1>/BOOK/REST/ajax <small>(jQuery $.ajax)</small></h1>
+
+    <fieldset>
+        <legend>도서 등록 / 수정</legend>
+        코드 <input type="number" id="bookCode">
+        도서명 <input type="text" id="bookName">
+        출판사 <input type="text" id="publisher">
+        ISBN <input type="text" id="isbn">
+        <button id="saveBtn" onclick="save()">등록</button>
+        <button onclick="resetForm()">초기화</button>
+        <div class="err" id="errBox"></div>
+    </fieldset>
+
+    <table>
+        <thead>
+            <tr><th>코드</th><th>도서명</th><th>출판사</th><th>ISBN</th><th>관리</th></tr>
+        </thead>
+        <tbody id="bookTbody"></tbody>
+    </table>
+
+    <script>
+        const BASE = '/book/rest';
+        let editMode = false;
+
+        function loadList() {
+            $.ajax({
+                url: `${BASE}/list?pageNo=0&amount=10`,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    const list = data.list || [];
+                    let html = '';
+                    list.forEach(b => {
+                        html += `
+                            <tr>
+                                <td>${b.bookCode}</td><td>${b.bookName}</td>
+                                <td>${b.publisher}</td><td>${b.isbn}</td>
+                                <td>
+                                    <button onclick='edit(${JSON.stringify(b)})'>수정</button>
+                                    <button onclick='remove(${b.bookCode})'>삭제</button>
+                                </td>
+                            </tr>`;
+                    });
+                    $('#bookTbody').html(html);
+                }
+            });
+        }
+
+        function formData() {
+            return {
+                bookCode: $('#bookCode').val() === '' ? null : Number($('#bookCode').val()),
+                bookName: $('#bookName').val(),
+                publisher: $('#publisher').val(),
+                isbn: $('#isbn').val()
+            };
+        }
+
+        function save() {
+            $('#errBox').text('');
+            const data = formData();
+            $.ajax({
+                url: editMode ? `${BASE}/update` : `${BASE}/add`,
+                method: editMode ? 'PUT' : 'POST',
+                contentType: 'application/json',   // 요청 본문이 JSON 임을 명시
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function (res) { alert(res.message); resetForm(); loadList(); },
+                error: function (xhr) {
+                    if (xhr.status === 400) {
+                        const res = xhr.responseJSON || {};
+                        $('#errBox').text(Object.entries(res).map(([f, m]) => `${f}: ${m}`).join(' / '));
+                    } else { alert('오류 발생'); }
+                }
+            });
+        }
+
+        function edit(b) {
+            editMode = true;
+            $('#bookCode').val(b.bookCode).prop('readonly', true);
+            $('#bookName').val(b.bookName);
+            $('#publisher').val(b.publisher);
+            $('#isbn').val(b.isbn);
+            $('#saveBtn').text('수정');
+        }
+
+        function remove(bookCode) {
+            if (!confirm(bookCode + ' 삭제할까요?')) return;
+            $.ajax({
+                url: `${BASE}/delete`,
+                method: 'DELETE',
+                contentType: 'application/json',
+                data: JSON.stringify({ bookCode }),
+                dataType: 'json',
+                success: function (res) { alert(res.message); loadList(); }
+            });
+        }
+
+        function resetForm() {
+            editMode = false;
+            $('#bookCode').val('').prop('readonly', false);
+            $('#bookName, #publisher, #isbn').val('');
+            $('#saveBtn').text('등록');
+            $('#errBox').text('');
+        }
+
+        $(function () { loadList(); });
+    </script>
+</body>
+</html>

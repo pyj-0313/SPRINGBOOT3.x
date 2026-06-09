@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOK REST - XHR (정답)</title>
+    <style>
+        body { font-family: sans-serif; max-width: 820px; margin: 20px auto; }
+        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: center; }
+        .err { color: #c00; font-size: 12px; min-height: 16px; }
+        input { padding: 4px; }
+    </style>
+</head>
+<body>
+    <h1>/BOOK/REST/xhr <small>(XMLHttpRequest)</small></h1>
+
+    <fieldset>
+        <legend>도서 등록 / 수정</legend>
+        코드 <input type="number" id="bookCode">
+        도서명 <input type="text" id="bookName">
+        출판사 <input type="text" id="publisher">
+        ISBN <input type="text" id="isbn">
+        <button id="saveBtn" onclick="save()">등록</button>
+        <button onclick="resetForm()">초기화</button>
+        <div class="err" id="errBox"></div>
+    </fieldset>
+
+    <table>
+        <thead>
+            <tr><th>코드</th><th>도서명</th><th>출판사</th><th>ISBN</th><th>관리</th></tr>
+        </thead>
+        <tbody id="bookTbody"></tbody>
+    </table>
+
+    <script>
+        const BASE = '/book/rest';
+        let editMode = false;
+
+        // 공통 XHR 헬퍼 (method, url, body, onSuccess, onError)
+        function sendJson(method, url, body, onSuccess, onError) {
+            const xhr = new XMLHttpRequest();
+            xhr.open(method, url);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== XMLHttpRequest.DONE) return;
+                const data = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+                if (xhr.status >= 200 && xhr.status < 300) onSuccess(data);
+                else onError(xhr.status, data);
+            };
+            xhr.send(body ? JSON.stringify(body) : null);
+        }
+
+        function loadList() {
+            sendJson('GET', `${BASE}/list?pageNo=0&amount=10`, null, function (data) {
+                const list = data.list || [];
+                const tbody = document.getElementById('bookTbody');
+                tbody.innerHTML = '';
+                list.forEach(b => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${b.bookCode}</td><td>${b.bookName}</td>
+                            <td>${b.publisher}</td><td>${b.isbn}</td>
+                            <td>
+                                <button onclick='edit(${JSON.stringify(b)})'>수정</button>
+                                <button onclick='remove(${b.bookCode})'>삭제</button>
+                            </td>
+                        </tr>`;
+                });
+            }, function () {});
+        }
+
+        function formData() {
+            return {
+                bookCode: document.getElementById('bookCode').value === '' ? null : Number(document.getElementById('bookCode').value),
+                bookName: document.getElementById('bookName').value,
+                publisher: document.getElementById('publisher').value,
+                isbn: document.getElementById('isbn').value
+            };
+        }
+
+        function save() {
+            document.getElementById('errBox').innerText = '';
+            const data = formData();
+            const method = editMode ? 'PUT' : 'POST';
+            const url = editMode ? `${BASE}/update` : `${BASE}/add`;
+            sendJson(method, url, data,
+                function (res) { alert(res.message); resetForm(); loadList(); },
+                function (status, res) {
+                    if (status === 400) {
+                        document.getElementById('errBox').innerText =
+                            Object.entries(res).map(([f, m]) => `${f}: ${m}`).join(' / ');
+                    } else { alert('오류 발생'); }
+                });
+        }
+
+        function edit(b) {
+            editMode = true;
+            document.getElementById('bookCode').value = b.bookCode;
+            document.getElementById('bookCode').readOnly = true;
+            document.getElementById('bookName').value = b.bookName;
+            document.getElementById('publisher').value = b.publisher;
+            document.getElementById('isbn').value = b.isbn;
+            document.getElementById('saveBtn').innerText = '수정';
+        }
+
+        function remove(bookCode) {
+            if (!confirm(bookCode + ' 삭제할까요?')) return;
+            sendJson('DELETE', `${BASE}/delete`, { bookCode },
+                function (res) { alert(res.message); loadList(); }, function () {});
+        }
+
+        function resetForm() {
+            editMode = false;
+            ['bookCode', 'bookName', 'publisher', 'isbn'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('bookCode').readOnly = false;
+            document.getElementById('saveBtn').innerText = '등록';
+            document.getElementById('errBox').innerText = '';
+        }
+
+        loadList();
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOK REST - axios (정답)</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 820px; margin: 20px auto; }
+        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: center; }
+        .err { color: #c00; font-size: 12px; min-height: 16px; }
+        input { padding: 4px; }
+    </style>
+</head>
+<body>
+    <h1>/BOOK/REST/axios</h1>
+
+    <!-- CREATE / UPDATE -->
+    <fieldset>
+        <legend>도서 등록 / 수정</legend>
+        코드 <input type="number" id="bookCode">
+        도서명 <input type="text" id="bookName">
+        출판사 <input type="text" id="publisher">
+        ISBN <input type="text" id="isbn">
+        <button id="saveBtn" onclick="save()">등록</button>
+        <button onclick="resetForm()">초기화</button>
+        <div class="err" id="errBox"></div>
+    </fieldset>
+
+    <!-- LIST -->
+    <table>
+        <thead>
+            <tr><th>코드</th><th>도서명</th><th>출판사</th><th>ISBN</th><th>관리</th></tr>
+        </thead>
+        <tbody id="bookTbody"></tbody>
+    </table>
+
+    <script>
+        const BASE = '/book/rest';
+        let editMode = false; // false=등록(POST) / true=수정(PUT)
+
+        function loadList() {
+            axios.get(`${BASE}/list?pageNo=0&amount=10`)
+                .then(res => {
+                    const list = res.data.list || [];
+                    const tbody = document.getElementById('bookTbody');
+                    tbody.innerHTML = '';
+                    list.forEach(b => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${b.bookCode}</td>
+                                <td>${b.bookName}</td>
+                                <td>${b.publisher}</td>
+                                <td>${b.isbn}</td>
+                                <td>
+                                    <button onclick='edit(${JSON.stringify(b)})'>수정</button>
+                                    <button onclick='remove(${b.bookCode})'>삭제</button>
+                                </td>
+                            </tr>`;
+                    });
+                });
+        }
+
+        function formData() {
+            return {
+                bookCode: document.getElementById('bookCode').value === '' ? null : Number(document.getElementById('bookCode').value),
+                bookName: document.getElementById('bookName').value,
+                publisher: document.getElementById('publisher').value,
+                isbn: document.getElementById('isbn').value
+            };
+        }
+
+        function save() {
+            document.getElementById('errBox').innerText = '';
+            const data = formData();
+            const req = editMode
+                ? axios.put(`${BASE}/update`, data)
+                : axios.post(`${BASE}/add`, data);
+
+            req.then(res => {
+                    alert(res.data.message);
+                    resetForm();
+                    loadList();
+                })
+                .catch(err => {
+                    if (err.response && err.response.status === 400) {
+                        const msgs = Object.entries(err.response.data)
+                            .map(([f, m]) => `${f}: ${m}`).join(' / ');
+                        document.getElementById('errBox').innerText = msgs;
+                    } else {
+                        alert('오류 발생');
+                    }
+                });
+        }
+
+        function edit(b) {
+            editMode = true;
+            document.getElementById('bookCode').value = b.bookCode;
+            document.getElementById('bookCode').readOnly = true; // PK 는 수정 불가
+            document.getElementById('bookName').value = b.bookName;
+            document.getElementById('publisher').value = b.publisher;
+            document.getElementById('isbn').value = b.isbn;
+            document.getElementById('saveBtn').innerText = '수정';
+        }
+
+        function remove(bookCode) {
+            if (!confirm(bookCode + ' 삭제할까요?')) return;
+            axios.delete(`${BASE}/delete`, { data: { bookCode } })
+                .then(res => { alert(res.data.message); loadList(); });
+        }
+
+        function resetForm() {
+            editMode = false;
+            ['bookCode', 'bookName', 'publisher', 'isbn'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('bookCode').readOnly = false;
+            document.getElementById('saveBtn').innerText = '등록';
+            document.getElementById('errBox').innerText = '';
+        }
+
+        loadList();
+    </script>
+</body>
+</html>
