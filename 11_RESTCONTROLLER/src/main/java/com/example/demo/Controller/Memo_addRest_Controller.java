@@ -56,10 +56,10 @@ public class Memo_addRest_Controller {
         log.info("GET /memo/rest/jquery");
         return "memo/rest/jquery";
     }
-    @GetMapping("/rest/axious")
+    @GetMapping("/rest/axios")
     public String restIndex_axious(){
-        log.info("GET /memo/rest/axious");
-        return "memo/rest/axious";
+        log.info("GET /memo/rest/axios");
+        return "memo/rest/axios";
     }
     @ResponseBody
     @GetMapping(value = "/rest/list" , consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
