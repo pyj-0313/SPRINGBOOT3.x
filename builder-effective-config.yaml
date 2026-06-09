@@ -1,0 +1,10 @@
+directories:
+  output: dist
+  buildResources: build
+asar: false
+files:
+  - filter:
+      - '**/*'
+      - images/*
+      - sounds/*
+electronVersion: 42.0.1
