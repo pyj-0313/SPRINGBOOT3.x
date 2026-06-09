@@ -85,11 +85,16 @@
         const pageNo = formList.pageNo.value;
         const amount = formList.amount.value;
 
-        const opt = {method :"GET",headers : {"Content-Type" : "application/json"}}
-        const response = await fetch(`/memo/rest/list?pageNo=${pageNo}&amount=${amount}`,opt,null);
+        $.ajax({
+            url : `/memo/rest/list?pageNo=${pageNo}&amount=${amount}`,
+            method : "GET",
+            contentType:"application/json",
+            dataType : "json",
+            // data : {},
+            success : function(data){console.log(data);},
+            error : function(xhr,status,error){console.log(error);}
+        })
 
-        const data = await response.json();
-        console.log(data);
 
     }
 
@@ -102,11 +107,15 @@
         const body={title,text,writer};
         const jsonBody = JSON.stringify(body);
 
-        const opt = {method :"POST",headers : {"Content-Type" : "application/json"},body:jsonBody}
-        const response = await fetch(`/memo/rest/add`,opt);
-
-        const data = await response.json();
-        console.log(data);
+        $.ajax({
+            url : `/memo/rest/add`,
+            method : "POST",
+            contentType:"application/json",
+            dataType : "json",
+            data : jsonBody,
+            success : function(data){console.log(data);},
+            error : function(xhr,status,error){console.log(error);}
+        })
 
     }
 
@@ -120,11 +129,15 @@
         const body={id,title,text,writer};
         const jsonBody = JSON.stringify(body);
 
-        const opt = {method :"PUT",headers : {"Content-Type" : "application/json"},body:jsonBody}
-        const response = await fetch(`/memo/rest/update`,opt);
-
-        const data = await response.json();
-        console.log(data);
+        $.ajax({
+            url : `/memo/rest/update`,
+            method : "PUT",
+            contentType:"application/json",
+            dataType : "json",
+            data : jsonBody,
+            success : function(data){console.log(data);},
+            error : function(xhr,status,error){console.log(error);}
+        })
 
     }
 
@@ -132,15 +145,22 @@
     async function deleteMemo() {
         const formDelete = document.formDelete;
         const id = formDelete.id.value;
-        const body={id};
+        const body = {id};
         const jsonBody = JSON.stringify(body);
 
-        const opt = {method :"DELETE",headers : {"Content-Type" : "application/json"},body:jsonBody}
-        const response = await fetch(`/memo/rest/delete`,opt);
-
-        const data = await response.json();
-        console.log(data);
-
+        $.ajax({
+            url: `/memo/rest/delete`,
+            method: "DELETE",
+            contentType: "application/json",
+            dataType: "json",
+            data: jsonBody,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        })
     }
 </script>
 
