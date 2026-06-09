@@ -51,10 +51,10 @@ public class Memo_addRest_Controller {
         log.info("GET /memo/rest/fetch");
         return "memo/rest/fetch";
     }
-    @GetMapping("/rest/ajax")
+    @GetMapping("/rest/jquery")
     public String restIndex_ajax(){
-        log.info("GET /memo/rest/ajax");
-        return "memo/rest/ajax";
+        log.info("GET /memo/rest/jquery");
+        return "memo/rest/jquery";
     }
     @GetMapping("/rest/axious")
     public String restIndex_axious(){
