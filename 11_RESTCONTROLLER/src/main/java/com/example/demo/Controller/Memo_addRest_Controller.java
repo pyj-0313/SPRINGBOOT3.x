@@ -83,7 +83,7 @@ public class Memo_addRest_Controller {
 
     @ResponseBody
     @PostMapping(value = "/rest/add",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity< Map<String,Object> > memoAddPost_rest(@RequestBody @Valid MemoDTO memoDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws Exception {
+    public ResponseEntity< Map<String,Object> > memoAddPost_rest(@RequestBody @Valid MemoDTO memoDTO, BindingResult bindingResult) throws Exception {
         Map<String, Object> responseMap = new HashMap<>();
         //1. 파라미터 받기
         log.info("POST /memo/add..." + memoDTO);
@@ -106,6 +106,48 @@ public class Memo_addRest_Controller {
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
 
+    @ResponseBody
+    @PutMapping(value = "/rest/update",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity< Map<String,Object> > memoUpdatePut_rest(@RequestBody @Valid MemoDTO memoDTO, BindingResult bindingResult) throws Exception {
+        Map<String, Object> responseMap = new HashMap<>();
+        //1. 파라미터 받기
+        log.info("PUT /memo/rest/update..." + memoDTO);
+//        log.info("BindingResult : " + result);
+
+        //2. 유효성 검증
+        if (bindingResult.hasErrors()) {
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                log.info("Error Field : " + error.getField() + " Error Message : " + error.getDefaultMessage());
+                responseMap.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+        }
+
+        //3. 서비스 실행
+        boolean isRegistration = memoService.updateMemo(memoDTO);
+
+        //4. 뷰로 이동(+값)
+        responseMap.put("message", "메모수정 성공!");
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
+
+    @ResponseBody
+    @DeleteMapping(value = "/rest/delete",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity< Map<String,Object> > memoDelete_rest(@RequestBody MemoDTO dto) throws Exception {
+        Map<String, Object> responseMap = new HashMap<>();
+        //1. 파라미터 받기
+        log.info("PUT /memo/rest/delete..." + dto.getId());
+//        log.info("BindingResult : " + result);
+
+        //2. 유효성 검증
+
+        //3. 서비스 실행
+        boolean isRegistration = memoService.removeMemo(dto.getId());
+
+        //4. 뷰로 이동(+값)
+        responseMap.put("message", "메모삭제 성공!");
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
 //    ------------------------------------------------------
 //    REST HANDLER
 //    ------------------------------------------------------
