@@ -3,6 +3,7 @@ package com.example.demo.외부API연동.C03Kakao;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -32,6 +34,7 @@ public class KakaoLoginController {
 
     private KakaoTokenResponse kakaoTokenResponse;
     private KakaoProfileResponse kakaoProfileResponse;
+    private KakaoFriendsResponse kakaoFriendsResponse;
 
     @GetMapping("/login")
     public String login(){
@@ -199,6 +202,7 @@ public class KakaoLoginController {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST,entity,String.class);
     }
 
+
     @GetMapping("/friends")
     @ResponseBody
     public void getFriends(){
@@ -221,6 +225,57 @@ public class KakaoLoginController {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<KakaoFriendsResponse> response = restTemplate.exchange(url, HttpMethod.GET,entity,KakaoFriendsResponse.class);
         System.out.println(response.getBody());
+        this.kakaoFriendsResponse = response.getBody();
+
+    }
+
+    @GetMapping("/message/friends/{message}")
+    @ResponseBody
+    public void message_friends(@PathVariable String message){
+
+        //DOC : https://developers.kakao.com/docs/ko/kakaotalk-message/rest-api
+//        log.info("GET /Kakao/message/me...{}",message);
+        log.info("GET /Kakao/message/friends...{}",message);
+        //요청파라미터 정리
+//        String url = "https://kapi.kakao.com/v2/api/talk/memo/default/send";
+        String url = "https://kapi.kakao.com/v1/api/talk/friends/message/default/send";
+
+        MultiValueMap<String,Object> params = new LinkedMultiValueMap<>();
+
+
+        String[] uuids  = kakaoFriendsResponse      .getElements()
+                                                    .stream()
+                                                    .map((el)->{return el.getUuid();})
+                                                    .collect(Collectors.toList())
+                                                    .toArray(String[]::new);
+
+        JSONArray receiver_uuids = new JSONArray(); // [{},{}]
+        for(String uuid : uuids){
+            receiver_uuids.add(uuid);
+        }
+        params.add("receiver_uuids",receiver_uuids.toString());
+
+
+        JSONObject template_object = new JSONObject();
+        template_object.put("object_type","text");
+        template_object.put("text",message);
+        template_object.put("link",new JSONObject());
+        template_object.put("button_title",".");
+
+        params.add("template_object",template_object.toJSONString());
+
+        //요청 헤더
+        HttpHeaders header = new HttpHeaders();
+        header.add("Authorization","Bearer "+kakaoTokenResponse.getAccess_token());
+        header.add("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+
+
+        //요청 엔터티(헤더 + 바디(params))
+        HttpEntity< MultiValueMap<String,Object> > entity = new HttpEntity<>(params,header);
+
+        //응답 = 요청
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST,entity,String.class);
     }
 
     //---------------------------------------
