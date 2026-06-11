@@ -3,6 +3,7 @@ package com.example.demo.외부API연동.C03Kakao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,8 +18,8 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequestMapping("/Kakao/pay")
 public class C04KakaoPayController {
-
-    private String SECRET_KEY="";
+    @Value("${kakopay.secretkey}")
+    private String SECRET_KEY;
 
     @GetMapping
     @ResponseBody

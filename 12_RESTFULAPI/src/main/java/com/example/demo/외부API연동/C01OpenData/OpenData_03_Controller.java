@@ -2,6 +2,7 @@ package com.example.demo.외부API연동.C01OpenData;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,9 @@ import java.net.URI;
 @Slf4j
 @RequestMapping("/Open/DgIncident")
 public class OpenData_03_Controller {
+    @Value("${data.serviceKey}")
+    private String serviceKey;
     private String server="https://apis.data.go.kr/6270000/service/rest/dgincident";
-    private String serviceKey="";
     private String pageNo = "1";
     private String numOfRows = "10";
 

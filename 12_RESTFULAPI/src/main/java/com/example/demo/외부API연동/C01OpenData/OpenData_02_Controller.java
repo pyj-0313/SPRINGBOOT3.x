@@ -2,6 +2,7 @@ package com.example.demo.외부API연동.C01OpenData;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +25,9 @@ import java.util.ArrayList;
 @RequestMapping("/Open/Bus")
 public class OpenData_02_Controller {
     //&bsId=7001001600&routeNo=649
-
+    @Value("${data.serviceKey}")
+    private String serviceKey;
     private String server="https://apis.data.go.kr/6270000/dbmsapi02/getRealtime02";
-    private String serviceKey="";
     private String bsId = "7001001600";
     private String routeNo = "649";
     @GetMapping("/{bsId}/{routeNo}")

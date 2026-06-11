@@ -2,6 +2,7 @@ package com.example.demo.외부API연동.C02OpenWeatherMap;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,9 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/OpenWeather")
 public class OpenWeatherMapController {
+    @Value("${weathermap.appid}")
+    private String appid;
     private String server="https://api.openweathermap.org/data/2.5/weather";
-    private String appid="b7a263e63bfe790ff0081e9b619e7c91";
 
     //동기요청방식(SPRINGBOOT 단독 FN + BN)
     @GetMapping("/index")

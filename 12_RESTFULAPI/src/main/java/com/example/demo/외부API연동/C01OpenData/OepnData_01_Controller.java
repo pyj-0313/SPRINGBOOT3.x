@@ -2,7 +2,9 @@ package com.example.demo.외부API연동.C01OpenData;
 
 
 import lombok.Data;
+
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +20,9 @@ import java.util.ArrayList;
 @Slf4j
 @RequestMapping("/Open/Weather")
 public class OepnData_01_Controller {
-
+    @Value("${data.serviceKey}")
+    private String serviceKey;
     private String server="https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";
-    private String serviceKey="";
     private String pageNo="1";
     private String numOfRows="1000";
     private String dataType="JSON";

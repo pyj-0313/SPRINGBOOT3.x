@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,8 +28,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping("/Kakao")
 public class C02KakaoLoginController {
-
-    private String CLIENT_ID="";
+    @Value("${kakao.client-id}")
+    private String CLIENT_ID;
     private String REDIRECT_URI="http://192.168.5.11:8080/Kakao/callback";
     private String LOGOUT_REDIRECT_URI="http://192.168.5.11:8080/Kakao/login";
 
