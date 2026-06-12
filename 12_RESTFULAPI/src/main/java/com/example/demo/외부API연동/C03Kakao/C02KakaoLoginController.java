@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping("/Kakao")
 public class C02KakaoLoginController {
-    @Value("${kakao.client-id}")
+    @Value("${kakao.clientId}")
     private String CLIENT_ID;
     private String REDIRECT_URI="http://192.168.5.11:8080/Kakao/callback";
     private String LOGOUT_REDIRECT_URI="http://192.168.5.11:8080/Kakao/login";
