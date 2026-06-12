@@ -8,7 +8,7 @@
 
     <h1>MAIN PAGE /Naver</h1>
     <a href="/Naver/logout">로그아웃(동기)(/Naver/logout)</a> |
-    <a href="javascript:requestNaverLogin()">로그아웃(팝업창이용)</a> |
+    <a href="javascript:requestNaverLogout()">로그아웃(팝업창이용)</a> |
 
     <hr/>
     <h2>naverTokenResponse</h2>
@@ -18,11 +18,10 @@
     <div th:text="${naverProfileResponse}"></div>
     <hr/>
 
-
     <iframe id="naverLogoutFrame" style="display:none;width:0;height:0;border:0"></iframe>
 
     <script>
-        async function requestNaverLogin(){
+        async function requestNaverLogout(){
             //1) 네이버 세션 로그아웃을 "팝업"으로 처리 (ifram/fetch는 네이버가 차단)
             //  returl은 네이버가 외부도메인을 무시하므로 의존하지 않고, 팝업을 직접 닫는다.
             const popup = window.open(
