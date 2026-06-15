@@ -2,6 +2,7 @@ package com.example.demo.외부API연동.C07CollSMS;
 
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -37,13 +38,15 @@ import java.util.UUID;
 @Slf4j
 @RequestMapping("/coolsms")
 public class CoolSmsController {
-
-    private String API_KEY = "";       // 솔라피 API Key
-    private String API_SECRET = "";    // 솔라피 API Secret
-    private String FROM = "";          // 사전 등록된 발신번호 (예: 01012345678)
+    @Value("${coolsms_apikey}")
+    private String API_KEY;       // 솔라피 API Key
+    @Value("${coolsms_secret}")
+    private String API_SECRET;    // 솔라피 API Secret
+    @Value("${coolsms_num}")
+    private String from;          // 사전 등록된 발신번호 (예: 01012345678)
 
     private final String SEND_URL = "https://api.solapi.com/messages/v4/send";
-
+    //http://localhost:8080/coolsms/send?to=(휴대폰번호)&text=안녕하세요
     // 문자 1건 전송
     // 문서: https://developers.solapi.com/references/messages/sendManyDetail
     @GetMapping("/send")
@@ -73,7 +76,7 @@ public class CoolSmsController {
         // 2) 요청 바디 { "message": { to, from, text } }
         JSONObject message = new JSONObject();
         message.put("to", to);
-        message.put("from", FROM);
+        message.put("from", from);
         message.put("text", text);
 
         JSONObject params = new JSONObject();
