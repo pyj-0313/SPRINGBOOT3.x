@@ -38,3 +38,6 @@ out/
 
 ### api 제외
 src/main/resources/application-dev.properties
+
+## firebase SecretKey 제외하기
+src/main/resources/firebase-adminsdk.json
