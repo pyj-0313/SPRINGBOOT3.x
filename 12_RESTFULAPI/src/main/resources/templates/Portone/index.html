@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en' xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,9 +7,59 @@
 <body>
 
 
-    <button>결제하기</button>
 
-    <button>인증하기</button>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.18.0/dist/axios.min.js"></script>
+
+    <button onclick="reqPayment()">결제하기</button>
+
+    <button onclick="reqCertification()">인증하기</button>
+
+    <button onclick="reqPaymentsInfo()">결제내역 선택 조회</button>
+
+    <button onclick="reqPaymentsInfo()">결제취소</button>
+
+    <script>
+        // IMP.init("");
+        IMP.init("[[${impCode}]]");
+
+        //DOC : https://developers.portone.io/sdk/ko/v1-sdk/javascript-sdk/readme?v=v1
+
+        function reqPayment() {
+            IMP.request_pay({
+                channelKey: ("[[${payCode}]]"),
+                pay_method: "phone",
+                merchant_uid: "test_merchand"+new Date().getTime(),
+                name: "테스트 결제",
+                amount: 100,
+                buyer_tel: "010-0000-0000",
+            }, function(resp){console.log(resp);} );
+        }
+        async function reqCertification(){
+            await IMP.certification({
+                channelKey: ("[[${certCode}]]"),
+                merchant_uid: "test_cert"+new Date().toString(),
+            }, await function(resp){
+                console.log(resp);
+                const imp_uid = resp.imp_uid;
+                axios.get(`/Portone/certifications/${imp_uid}`)
+                    .then(resp2 => {console.log(resp2);})
+                    .catch(err =>{console.log(err);})
+            } );
+
+        }
+
+        //
+        function reqPaymentsInfo(){
+            axios.get("/Portone/payments")
+                .then(resp=>{console.log(resp);})
+                .catch(err=>{console.log(err);})
+        }
+
+
+    </script>
+
 
 </body>
 </html>
