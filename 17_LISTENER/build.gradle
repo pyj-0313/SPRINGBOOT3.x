@@ -46,7 +46,7 @@ dependencies {
 
 
 	// DEVTOOLS
-//	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-devtools'
 
 	// VALIDATION
 	implementation 'org.springframework.boot:spring-boot-starter-validation'

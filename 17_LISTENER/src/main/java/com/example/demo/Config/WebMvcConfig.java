@@ -2,7 +2,11 @@ package com.example.demo.Config;
 
 
 import com.example.demo.Interceptor.MemoInterceptor;
+import com.example.demo.Listener.C01CustomContextRefreshedListener;
+import com.example.demo.Listener.C02RequestHandledEventListener;
+import com.example.demo.Listener.MemoAddEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -29,6 +33,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addResourceHandler("/resourcese/js/**").addResourceLocations("classpath:/js/");
 //    }
 
+
+
+
     @Autowired
     MemoInterceptor memoInterceptor;
 
@@ -38,5 +45,23 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/memo/**")
                 .excludePathPatterns("/resourcese/css/**","/resourcese/js/**");    //정적경로 path 등록
     }
+
+//-----------------------------------------------
+// LISTENER
+//-----------------------------------------------
+    @Bean
+    public C01CustomContextRefreshedListener c01CustomContextRefreshedListener(){
+        return new C01CustomContextRefreshedListener();
+    }
+    @Bean
+    public C02RequestHandledEventListener c02RequestHandledEventListener(){
+        return new C02RequestHandledEventListener();
+    }
+
+    @Bean
+    public MemoAddEventListener memoAddEventListener(){
+        return new MemoAddEventListener();
+    }
+
 
 }

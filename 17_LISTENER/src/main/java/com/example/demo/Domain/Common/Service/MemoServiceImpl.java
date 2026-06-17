@@ -5,7 +5,9 @@ import com.example.demo.Domain.Common.Dtos.PageBlock;
 import com.example.demo.Domain.Common.Dtos.PageDTO;
 import com.example.demo.Domain.Common.Entity.Memo;
 import com.example.demo.Domain.Common.Repository.MemoRepository;
+import com.example.demo.Listener.MemoAddEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,12 +27,16 @@ public class MemoServiceImpl implements MemoService {
     @Autowired
     private MemoRepository memoRepository;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     //메모등록
     @Override
     @Transactional(rollbackFor = SQLException.class,transactionManager = "jpaTransactionManager")
     public boolean memoRegistration(MemoDTO memoDTO) throws Exception{
         memoDTO.setCreateAt(LocalDateTime.now());
         memoRepository.save(memoDTO.toEntity());
+        applicationEventPublisher.publishEvent(new MemoAddEvent(this,memoDTO));
         return true;
     }
 

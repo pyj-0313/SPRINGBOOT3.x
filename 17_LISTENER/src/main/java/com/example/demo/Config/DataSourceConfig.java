@@ -12,6 +12,7 @@ public class DataSourceConfig {
     @Bean
     public DataSource dataSource()
     {
+        System.out.println("!");
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/testdb");
