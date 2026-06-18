@@ -25,6 +25,10 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth)->{
             auth.requestMatchers("/","/join","/login").permitAll();
             //
+            auth.requestMatchers("/user").hasAnyRole("USER");//
+            auth.requestMatchers("/manager").hasAnyRole("MANAGER");//
+            auth.requestMatchers("/admin").hasAnyRole("ADMIN");//
+
             auth.anyRequest().authenticated(); // 나머지는 인증이 필요하다.
         });
 
