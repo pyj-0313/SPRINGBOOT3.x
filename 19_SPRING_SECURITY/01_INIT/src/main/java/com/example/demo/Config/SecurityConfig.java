@@ -25,7 +25,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth)->{
             auth.requestMatchers("/","/join","/login").permitAll();
             //
-            auth.requestMatchers("/user").hasAnyRole("USER");//
+            auth.requestMatchers("/user").hasAnyRole("USER","ADMIN");//
             auth.requestMatchers("/manager").hasAnyRole("MANAGER");//
             auth.requestMatchers("/admin").hasAnyRole("ADMIN");//
 
@@ -35,12 +35,14 @@ public class SecurityConfig {
         //로그인
         http.formLogin((login)->{
             login.permitAll();
+            login.loginPage("/login");
         });
 
 
         //로그아웃
         http.logout((logout)->{
             logout.permitAll();
+
         });
 
         return http.build();
