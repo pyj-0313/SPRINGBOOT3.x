@@ -27,7 +27,7 @@ public class SecurityConfig {
 
 
         //로그아웃
-
+        http.logout((logout)->{});
 
         return http.build();
     }
