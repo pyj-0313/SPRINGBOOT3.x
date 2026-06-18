@@ -22,8 +22,8 @@ public class SecurityConfig {
             auth.requestMatchers("/","/join","/login").permitAll();
         });
 
-
         //로그인
+        http.formLogin((login)->{});
 
 
         //로그아웃
