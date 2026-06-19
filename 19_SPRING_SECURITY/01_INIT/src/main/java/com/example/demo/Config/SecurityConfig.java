@@ -1,6 +1,9 @@
 package com.example.demo.Config;
 
 
+import com.example.demo.Config.auth.handler.CustomFailureHandler;
+import com.example.demo.Config.auth.handler.CustomLogoutHandler;
+import com.example.demo.Config.auth.handler.CustomSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,13 +37,15 @@ public class SecurityConfig {
         http.formLogin((login)->{
             login.permitAll();
             login.loginPage("/login");
+            login.successHandler(new CustomSuccessHandler());
+            login.failureHandler(new CustomFailureHandler());
         });
 
 
         //로그아웃
         http.logout((logout)->{
             logout.permitAll();
-
+            logout.addLogoutHandler(new CustomLogoutHandler());
         });
 
         return http.build();
