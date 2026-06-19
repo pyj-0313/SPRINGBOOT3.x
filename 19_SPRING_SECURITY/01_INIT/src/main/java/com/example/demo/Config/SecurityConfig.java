@@ -1,9 +1,7 @@
 package com.example.demo.Config;
 
 
-import com.example.demo.Config.auth.handler.CustomFailureHandler;
-import com.example.demo.Config.auth.handler.CustomLogoutHandler;
-import com.example.demo.Config.auth.handler.CustomSuccessHandler;
+import com.example.demo.Config.auth.handler.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,16 +35,24 @@ public class SecurityConfig {
         http.formLogin((login)->{
             login.permitAll();
             login.loginPage("/login");
-            login.successHandler(new CustomSuccessHandler());
-            login.failureHandler(new CustomFailureHandler());
+            login.successHandler(new CustomLoginSuccessHandler()); //로그인 성공시 동작하는 핸들러
+            login.failureHandler(new CustomLoginFailureHandler()); //로그인 실패시(ID 미존재, PW 불일치)
         });
 
 
         //로그아웃
         http.logout((logout)->{
             logout.permitAll();
-            logout.addLogoutHandler(new CustomLogoutHandler());
+            logout.addLogoutHandler(new CustomLogoutHandler()); //로그아웃 직접처리 핸들러
+            logout.logoutSuccessHandler(new CustomLogoutSuccessHandler()); //로그아웃 성공시 동작하느 핸들러
         });
+
+        //예외처리
+        http.exceptionHandling(exception->{
+            exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()); //미인증된 상태 + 권한이 필요한 Endpoint 접근시 예외 처리
+            exception.accessDeniedHandler(new CustomAccessDeniedHandler()); //인증이후 권한이 부족할때
+        });
+
 
         return http.build();
     }
