@@ -1,0 +1,4 @@
+package com.example.demo.Config.auth.jwt;
+
+public class JWTTokenProvider {
+}
