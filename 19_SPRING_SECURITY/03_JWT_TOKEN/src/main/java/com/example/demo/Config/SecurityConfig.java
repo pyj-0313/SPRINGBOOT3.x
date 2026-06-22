@@ -2,17 +2,39 @@ package com.example.demo.Config;
 
 
 import com.example.demo.Config.auth.handler.*;
+import com.example.demo.Config.auth.jwt.JWTAuthorizationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    JWTAuthorizationFilter jwtAuthorizationFilter;
+
+    @Autowired
+    CustomLoginSuccessHandler customLoginSuccessHandler;
+    @Autowired
+    CustomLoginFailureHandler customLoginFailureHandler;
+    @Autowired
+    CustomLogoutHandler customLogoutHandler;
+    @Autowired
+    CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    @Autowired
+    CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    @Autowired
+    CustomAccessDeniedHandler customAccessDeniedHandler;
+
+
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception
@@ -22,6 +44,9 @@ public class SecurityConfig {
 
         //권한처리
         http.authorizeHttpRequests((auth)->{
+            //정적경로 매핑
+            auth.requestMatchers("/favicon.ico").permitAll();
+
             auth.requestMatchers("/","/join","/login").permitAll();
             //
             auth.requestMatchers("/user").hasAnyRole("USER","ADMIN");//
@@ -35,28 +60,36 @@ public class SecurityConfig {
         http.formLogin((login)->{
             login.permitAll();
             login.loginPage("/login");
-            login.successHandler(new CustomLoginSuccessHandler()); //로그인 성공시 동작하는 핸들러
-            login.failureHandler(new CustomLoginFailureHandler()); //로그인 실패시(ID 미존재, PW 불일치)
+            login.successHandler(customLoginSuccessHandler); //로그인 성공시 동작하는 핸들러
+            login.failureHandler(customLoginFailureHandler); //로그인 실패시(ID 미존재, PW 불일치)
         });
 
 
         //로그아웃
         http.logout((logout)->{
             logout.permitAll();
-            logout.addLogoutHandler(new CustomLogoutHandler()); //로그아웃 직접처리 핸들러
-            logout.logoutSuccessHandler(new CustomLogoutSuccessHandler()); //로그아웃 성공시 동작하느 핸들러
+            logout.addLogoutHandler(customLogoutHandler); //로그아웃 직접처리 핸들러
+            logout.logoutSuccessHandler(customLogoutSuccessHandler); //로그아웃 성공시 동작하느 핸들러
         });
 
         //예외처리
         http.exceptionHandling(exception->{
-            exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()); //미인증된 상태 + 권한이 필요한 Endpoint 접근시 예외 처리
-            exception.accessDeniedHandler(new CustomAccessDeniedHandler()); //인증이후 권한이 부족할때
+            exception.authenticationEntryPoint(customAuthenticationEntryPoint); //미인증된 상태 + 권한이 필요한 Endpoint 접근시 예외 처리
+            exception.accessDeniedHandler(customAccessDeniedHandler); //인증이후 권한이 부족할때
         });
 
         //OAuth2-Client 활성
         http.oauth2Login((oauth2)->{
             oauth2.loginPage("/login");
         });
+
+        //SESSION 비활성화
+        http.sessionManagement((sessionConfig)->{
+            sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        });
+
+        //JWTFilter 추가
+        http.addFilterBefore(jwtAuthorizationFilter, LogoutFilter.class);
 
         return http.build();
     }
