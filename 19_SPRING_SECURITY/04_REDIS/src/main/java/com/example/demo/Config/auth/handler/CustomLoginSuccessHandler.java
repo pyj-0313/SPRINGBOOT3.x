@@ -71,8 +71,6 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         redisUtil.setDataExpire("RT:"+authentication.getName(),tokenInfo.getRefreshToken(),JWTProperties.REFRESH_TOKEN_EXPIRATION_TIME/1000);
 
 
-
-
         log.info("CustomSuccessHandler's onAuthenticationSuccess invoke..");
 //        response.sendRedirect("/");
         String redirectUrl = "/";

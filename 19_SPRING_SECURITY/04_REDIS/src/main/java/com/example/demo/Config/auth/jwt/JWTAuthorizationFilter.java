@@ -146,7 +146,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 String refreshToken = (username != null) ? redisUtil.getRefreshToken("RT:"+username) : null;
 //                JwtToken entity =  jwtTokenRepository.findByAccessToken(token);
 //                System.out.println("entity : " + entity);
-
                 if (refreshToken != null) {
                     try {
                         if (jwtTokenProvider.validateToken(refreshToken)) {

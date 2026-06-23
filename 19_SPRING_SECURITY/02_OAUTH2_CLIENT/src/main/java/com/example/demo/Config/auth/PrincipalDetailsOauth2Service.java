@@ -105,6 +105,8 @@ public class PrincipalDetailsOauth2Service extends DefaultOAuth2UserService {
             userDTO = UserDTO   .builder()
                                 .username(user.getUsername())
                                 .password(user.getPassword())
+                                .provider(provider)
+                                .ProviderId(oAuth2UserInfo.getProviderId())
                                 .role(user.getRole())
                                 .build();
         }
