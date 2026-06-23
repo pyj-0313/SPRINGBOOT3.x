@@ -1,0 +1,10 @@
+스프링부트 단독 프로젝트시
+1~7 기본
+8,9 선택
+10 필수
+11,12 비동기처리라 필요하면 사용
+13 필수
+14,15,16,17,18 개념이라 안써도됨
+19 매우 중요
+
+init, lombok_di,param,data_validation,exception,thymeleaf,sqlmapper_mybatis
