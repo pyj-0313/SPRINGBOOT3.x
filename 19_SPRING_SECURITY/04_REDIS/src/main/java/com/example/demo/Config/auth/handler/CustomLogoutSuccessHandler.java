@@ -1,6 +1,7 @@
 package com.example.demo.Config.auth.handler;
 
 import com.example.demo.Config.auth.jwt.JWTProperties;
+import com.example.demo.Config.auth.redis.RedisUtil;
 import com.example.demo.Domain.Common.Repository.JwtTokenRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -23,6 +24,10 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Autowired
     JwtTokenRepository jwtTokenRepository;
+
+    @Autowired
+    RedisUtil redisUtil;
+
     @Override
     @Transactional(rollbackFor = Exception.class,transactionManager = "jpaTransactionManager")
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -42,13 +47,19 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
         if(token!=null){
             //db 삭제
-            jwtTokenRepository.deleteByAccessToken(token);
+//            jwtTokenRepository.deleteByAccessToken(token);
+            redisUtil.delete("RT:" + authentication.getName());
 
             //access-token 쿠키 제거
             Cookie cookie = new Cookie(JWTProperties.ACCESS_TOKEN_COOKIE_NAME,null);
             cookie.setMaxAge(0);
             cookie.setPath("/");
             response.addCookie(cookie);
+
+            Cookie cookie2 = new Cookie("username",null);
+            cookie2.setMaxAge(0);
+            cookie2.setPath("/");
+            response.addCookie(cookie2);
 
         }
 
